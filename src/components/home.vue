@@ -1,23 +1,19 @@
 <template>
     <div>
-        <editor @output="output" />
-
-        <div id="con">
-
+        <div>
+            <TimeLine />
         </div>
     </div>
 </template>
 <script>
-import editor from '@/components/editor/'
+import TimeLine from '@/pages/timeLine/index.vue'
     export default{
         name:'Home',
         components:{
-            editor,
+            TimeLine,
         },
         methods:{
-            output(con){
-                document.getElementById('con').innerHTML=con
-            }
+           
         }
     }
 </script>
