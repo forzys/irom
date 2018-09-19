@@ -10,7 +10,24 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/it120': {
+        target: 'https://api.it120.cc/mforz/',
+        changeOrigin: true,
+        pathRewrite:{
+            '^/it120':'/'
+        }
+      },
+      '/zhihu': {
+        target: 'https://news-at.zhihu.com/api/',
+        changeOrigin: true,
+        pathRewrite:{
+            '^/zhihu':'/'
+        }
+      },
+      
+
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
