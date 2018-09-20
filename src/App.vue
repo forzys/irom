@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import '@/static/style/index.css'
 export default {
   name: 'App'
 }

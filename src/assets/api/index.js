@@ -21,3 +21,10 @@ export function ZHIHUTHEMES(){
     url:`/zhihu/4/themes`
   })
 }
+export function ZHIHUTHEMESLIST(id){
+  return Axios({
+    methods:'get',
+    url:`/zhihu/4/theme/${id}`
+  })
+}
+

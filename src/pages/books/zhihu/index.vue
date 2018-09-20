@@ -3,6 +3,7 @@
   <div class="zhihu">
     <!-- 图片跨域 -->
     <meta name="referrer" content="no-referrer" />
+  
     <!-- 导航 -->
    <Menu 
       mode="horizontal"
@@ -23,7 +24,7 @@
         v-for="(item,i) in data"
         :key="i"
         @click.stop="name=='1'?goDetail(item.id):goThemes(item.id)">
-        <img :src="item.images[0]" :onerror="logo" />
+        <img :src="item.images[0]" />
         <p class="title">{{item.title}}</p>
       </div>
     </div>
@@ -31,12 +32,12 @@
   </div>
 </template>
 <script>
-import { ZHIHULATEST,ZHIHUDETAIL,ZHIHUTHEMES} from '@/assets/api/index.js'
+import { ZHIHULATEST,ZHIHUDETAIL,ZHIHUTHEMES,ZHIHUTHEMESLIST} from '@/assets/api/index.js'
 export default {
   name:'zhihu',
   data(){
     return{
-      logo: 'this.src="' + require('@/static/404.jpg') + '"',
+      img:require('@/static/404.jpg'),
       name:'1',
       data:[],
     }
@@ -48,16 +49,19 @@ export default {
     //进入时初始化//获取知乎日报最新更新
     init(){
       this.data=[]
+       this.$Spin.show()
       ZHIHULATEST('/zhihu/4/news/latest').then(res=>{
         this.data=res.stories
         this.data.push({
-        id:'',
-        title:'点击查看更多',
-        images:[''],
+          id:'',
+          title:'点击查看更多',
+          images:[''],
         })
+        this.$Spin.hide()
       }).catch(e=>{
-        console.log(e)
+       this.$Spin.hide()
       })
+    
     },
     // 选择导航栏目
     select(e){
@@ -66,6 +70,7 @@ export default {
     },
     //点击进入详情
     goDetail(id){
+     this.$Spin.show()
       id!=''?
       this.$router.push({
         name: 'Detail',
@@ -81,12 +86,14 @@ export default {
             images:[item.thumbnail],
           })
         })
+        this.$Spin.hide()
       }).catch(e=>{
-        console.log(e)
+       this.$Spin.hide()
       })
     },
     //选择主题栏目
     getThemes(){
+      this.$Spin.show()
       ZHIHUTHEMES().then(res=>{
         let data=[];
         res.others.forEach(item=>{
@@ -97,16 +104,34 @@ export default {
           })
         })
         this.data=data
+        this.$Spin.hide()
       }).catch(e=>{
-        console.log(e)
+        this.$Spin.hide()
       })
     },
     //点击栏目详情
     goThemes(id){
-      console.log(id)
+       this.$Spin.show()
+      this.name='1'
+      history.pushState(null, null, document.URL);
+      ZHIHUTHEMESLIST(id).then(res=>{
+       this.data=[]
+       let image=''
+       res.stories.forEach(item=>{
+         item.images?image=item.images[0]:image=this.img
+         this.data.push({
+           id:item.id,
+           title:item.title,
+           images:[image]
+         })
+       })
+        this.$Spin.hide()
+      }).catch(e=>{
+        console.log(e)
+         this.$Spin.hide()
+      })
     },
   }
-
 }
 </script>
 
@@ -138,7 +163,7 @@ export default {
   border-color: #eee;
 }
 .card img{
-  max-width:30%;
+  max-width:25%;
   margin:2px;
 }
 .card .title{

@@ -1,5 +1,6 @@
 <template>
   <div class="detail">
+    <!-- <Spin size="large" fix v-if="spinShow"></Spin> -->
     <!-- {{{data.body}}} -->
     <h3>{{data.title}}</h3>
     <br>
@@ -25,6 +26,7 @@ export default {
   },
   data(){
     return{
+      // spinShow:true,
       id: this.$route.query.id||'',
       data:{
         body:'',
@@ -33,14 +35,17 @@ export default {
     }
   },
   mounted() {
+    
     this.init();
   },
   methods:{
     init(){
+      this.$Spin.show()
       ZHIHUDETAIL(this.id).then(res=>{
         this.data=res
+        this.$Spin.hide()
       }).catch(e=>{
-        console.log(e)
+        this.$Spin.hide()
       })
     }
   }
