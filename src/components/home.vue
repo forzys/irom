@@ -2,7 +2,10 @@
     <div>
         <div>
             <TimeLine />
-            <Zhihu />
+            <keep-alive>
+                <router-view v-if="$route.meta.keepAlive"></router-view>
+            </keep-alive>
+                <router-view v-if="!$route.meta.keepAlive"></router-view>
         </div>
     </div>
 </template>
@@ -15,9 +18,9 @@ import Zhihu from '@/pages/books/zhihu/index.vue'
             TimeLine,
             Zhihu,
         },
-        methods:{
-           
-        }
+        mounted() {
+            this.$router.push('/zhihu')
+        },
     }
 </script>
  <style lang="">

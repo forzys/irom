@@ -3,27 +3,41 @@
   <div class="zhihu">
     <!-- 图片跨域 -->
     <meta name="referrer" content="no-referrer" />
-    <Row>
-      <Col v-for="(item) in data" :key="item.id" span="10" offset="1">
-        <Card style="margin:10px auto;" class="card">
-          <div style="text-align:center" @click.stop="goDetail(item.id)">
-            <p slot="title" class="title">
-              <a href="#">{{item.title}}</a>
-            </p>
-            <img :src="item.images[0]" />
-          </div>
-        </Card>
-      </Col>
-    </Row>
+    <!-- 导航 -->
+   <Menu 
+      mode="horizontal"
+      active-name="1"
+      @on-select="select"
+      style="display:flex;">
+      <MenuItem name="1" style="flex:1;text-align:center;">
+          最近更新
+      </MenuItem>
+      <MenuItem name="2" style="flex:1;text-align:center;">
+          主题栏目
+      </MenuItem>
+    </Menu>
+    <!-- 列表 -->
+    <div class="list">
+      <div 
+        class="card"
+        v-for="(item,i) in data"
+        :key="i"
+        @click.stop="name=='1'?goDetail(item.id):goThemes(item.id)">
+        <img :src="item.images[0]" :onerror="logo" />
+        <p class="title">{{item.title}}</p>
+      </div>
+    </div>
+
   </div>
 </template>
-
 <script>
-import { ZHIHULATEST } from '@/assets/api/index.js'
+import { ZHIHULATEST,ZHIHUDETAIL,ZHIHUTHEMES} from '@/assets/api/index.js'
 export default {
   name:'zhihu',
   data(){
     return{
+      logo: 'this.src="' + require('@/static/404.jpg') + '"',
+      name:'1',
       data:[],
     }
   },
@@ -31,23 +45,66 @@ export default {
     this.init();
   },
   methods:{
+    //进入时初始化//获取知乎日报最新更新
     init(){
-      //获取知乎日报最新更新
+      this.data=[]
       ZHIHULATEST('/zhihu/4/news/latest').then(res=>{
-        console.log(res)
         this.data=res.stories
         this.data.push({
-          id:'000',
-          title:'点击查看更多',
-          images:['']
+        id:'',
+        title:'点击查看更多',
+        images:[''],
         })
       }).catch(e=>{
         console.log(e)
       })
     },
+    // 选择导航栏目
+    select(e){
+      this.name=e.toString();
+      this.name=='1'?this.init():this.getThemes()
+    },
+    //点击进入详情
     goDetail(id){
-     console.log(id)
-    }
+      id!=''?
+      this.$router.push({
+        name: 'Detail',
+        query: {id: id}}
+      ):
+      ZHIHUDETAIL('hot').then(res=>{
+        let data=res.recent;
+        this.data.pop();
+        data.forEach(item => {
+          this.data.push({
+            id:item.news_id,
+            title:item.title,
+            images:[item.thumbnail],
+          })
+        })
+      }).catch(e=>{
+        console.log(e)
+      })
+    },
+    //选择主题栏目
+    getThemes(){
+      ZHIHUTHEMES().then(res=>{
+        let data=[];
+        res.others.forEach(item=>{
+          data.push({
+            id:item.id,
+            title:`(${item.name})--${item.description}`,
+            images:[item.thumbnail]
+          })
+        })
+        this.data=data
+      }).catch(e=>{
+        console.log(e)
+      })
+    },
+    //点击栏目详情
+    goThemes(id){
+      console.log(id)
+    },
   }
 
 }
@@ -55,20 +112,47 @@ export default {
 
 <style scoped>
 .zhihu{
-  width:80%;
+  width:70vw;
   margin:0 auto;
-  overflow: hidden;
+}
+.list>.title{
+  margin:10px auto;
+  text-align: center;
+  font-size:18px;
+  
+}
+.card{
+  width:70vw;
+  margin:10px auto;
+  display: flex;
+  align-items: center;
+  padding:5px;
+  border: 1px solid #dcdee2;
+  border-color: #e8eaec;
+  transition: all .2s ease-in-out;
+  border-radius:4px;
+  cursor: pointer;
+}
+.card:hover{
+  box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  border-color: #eee;
 }
 .card img{
-  width:100%;
+  max-width:30%;
+  margin:2px;
 }
-.title{
-  overflow : hidden;
-  text-overflow: ellipsis;
+.card .title{
+  font-size:12px;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  margin-left:15px;
   -webkit-box-orient: vertical;
-  height:5vw;
-  line-height: 5vw;
+  -webkit-line-clamp: 3; /*截取第三行*/
+  overflow: hidden;
+}
+.card:last-child .title{
+  width:100%;
+  margin:0;
+  text-align: center;
+  color:#e12;
 }
 </style>
