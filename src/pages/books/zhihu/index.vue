@@ -17,6 +17,7 @@
           主题栏目
       </MenuItem>
     </Menu>
+
     <!-- 列表 -->
     <div class="list">
       <div 
@@ -32,7 +33,7 @@
   </div>
 </template>
 <script>
-import { ZHIHULATEST,ZHIHUDETAIL,ZHIHUTHEMES,ZHIHUTHEMESLIST} from '@/assets/api/index.js'
+import { ZHIHULATEST, ZHIHUDETAIL, ZHIHUTHEMES, ZHIHUTHEMESLIST } from '@/assets/api/index.js'
 export default {
   name:'zhihu',
   data(){
@@ -49,7 +50,7 @@ export default {
     //进入时初始化//获取知乎日报最新更新
     init(){
       this.data=[]
-       this.$Spin.show()
+      this.$Spin.show()
       ZHIHULATEST('/zhihu/4/news/latest').then(res=>{
         this.data=res.stories
         this.data.push({
@@ -61,7 +62,6 @@ export default {
       }).catch(e=>{
        this.$Spin.hide()
       })
-    
     },
     // 选择导航栏目
     select(e){
@@ -70,16 +70,15 @@ export default {
     },
     //点击进入详情
     goDetail(id){
-     this.$Spin.show()
+      this.$Spin.show()
       id!=''?
       this.$router.push({
         name: 'Detail',
         query: {id: id}}
       ):
       ZHIHUDETAIL('hot').then(res=>{
-        let data=res.recent;
         this.data.pop();
-        data.forEach(item => {
+        res.recent.forEach(item => {
           this.data.push({
             id:item.news_id,
             title:item.title,
@@ -88,32 +87,32 @@ export default {
         })
         this.$Spin.hide()
       }).catch(e=>{
-       this.$Spin.hide()
+        this.$Spin.hide()
       })
     },
     //选择主题栏目
     getThemes(){
       this.$Spin.show()
       ZHIHUTHEMES().then(res=>{
-        let data=[];
+        this.data=[];
         res.others.forEach(item=>{
-          data.push({
+          this.data.push({
             id:item.id,
             title:`(${item.name})--${item.description}`,
             images:[item.thumbnail]
           })
         })
-        this.data=data
         this.$Spin.hide()
       }).catch(e=>{
+        this.data=[]
         this.$Spin.hide()
       })
     },
     //点击栏目详情
     goThemes(id){
-       this.$Spin.show()
+      this.$Spin.show()
       this.name='1'
-      history.pushState(null, null, document.URL);
+      // history.pushState(null, null, document.URL);
       ZHIHUTHEMESLIST(id).then(res=>{
        this.data=[]
        let image=''
@@ -127,8 +126,8 @@ export default {
        })
         this.$Spin.hide()
       }).catch(e=>{
-        console.log(e)
-         this.$Spin.hide()
+        this.data=[]
+        this.$Spin.hide()
       })
     },
   }
@@ -137,7 +136,7 @@ export default {
 
 <style scoped>
 .zhihu{
-  width:70vw;
+  width:100%;
   margin:0 auto;
 }
 .list>.title{

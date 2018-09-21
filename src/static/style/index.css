@@ -1,21 +1,37 @@
 
-  html::-webkit-scrollbar {
-    /*滚动条整体样式*/
-    width: 5px;
-    /*高宽分别对应横竖滚动条的尺寸*/
-    height: 1px;
+  /* 主色 #b4a078 RGB(180,160,120) HSL(40,28.6%,58.8%) */
+  /* 辅色 #be4141 RGB(190,65,65) HSL(0,49%,50%) */
+  /* 文字色 #333333 RGB(51,51,51) HSL(0,0%,20%) */
+  html,body{
+    font: 150%/1.6 Baskerville, Palatino, serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
   }
-
-  html::-webkit-scrollbar-thumb {
-    /*滚动条里面小方块*/
+  div{
+    color:#b4a078;
+  }
+  p,a{
+    color:#333333;
+  }
+ /*滚动条整体样式 高宽分别对应横竖滚动条的尺寸*/
+  html::-webkit-scrollbar{
+    /* background-color:transparent; */
+    width: 0px;
+  }
+/*滚动条里面小方块*/
+  /* html::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background: #E6A23C
-  }
-
-  html::-webkit-scrollbar-track {
-    /*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #be4141;
+  } */
+  /*滚动条里面轨道*/
+  /* html::-webkit-scrollbar-track {
+    
     border-radius: 10px;
-    background: rgb(253, 107, 222);
-  }
+    height:5px;
+    background-color:#b4a078;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+   
+  } */

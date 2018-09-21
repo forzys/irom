@@ -69,7 +69,8 @@ const components = {
   Tooltip,
   Transfer,
   Tree,
-  Upload
+  Upload,
+  Drawer,
 }
 
 import {
@@ -142,7 +143,8 @@ import {
   Tooltip,
   Transfer,
   Tree,
-  Upload
+  Upload,
+  Drawer
 } from 'iView'
 
 const iviewModule = {
