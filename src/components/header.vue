@@ -1,23 +1,16 @@
 <template>
   <div class="header">
-
-    <div class="left">
-      <!-- <Icon type="md-reorder" size="30" @click="drawe=true"/>
-      <Drawer title="菜单" placement="left" :closable="false" v-model="drawe">
-      </Drawer> -->
-    </div>
-
-    <div class="right">
-      <span>
-       <Icon type="md-person" size="22" />
-      </span>
-      <span>
-        <Icon type="md-cloudy" size="22" />
-      </span>
-      <span>
-        <Icon type="md-settings" size="22" />
-      </span>
-    </div>
+      <div></div>
+      <div class="right">
+       
+        <span><Icon type="ios-partly-sunny-outline" size="22" /></span>
+        <span><Icon type="ios-settings-outline" size="22" /></span>
+        <span @click="count=0">
+           <Badge :count="count">
+               <Icon type="md-bulb" size="22" />
+            </Badge>
+          </span>
+      </div>
 
   </div>
 </template>
@@ -27,7 +20,9 @@ export default {
   name:'Header',
   data(){
     return{
-      drawe:false
+      drawe:false,
+      count:5,
+      time:(new Date()).getTime()
     }
   },
   mounted() {
@@ -40,6 +35,7 @@ export default {
 <style>
 .header{
   width:100%;
+  min-height:50px;
   display:flex;
   justify-content: center;
   align-items: center;
