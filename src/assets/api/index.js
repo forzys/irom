@@ -97,27 +97,4 @@ export function IT120_QQMUSIC_HOT(begin=0,num=30){
     url:`it120/api/transmit/702?topid=26&song_begin=${begin}&song_num=${num}`
   })
 }
-
-// qqMusic Url
-export function IT120_QQMUSIC_VKEY(id,mid){
-   let data={
-    req:{
-      module:"vkey.GetVkeyServer",
-      method:"CgiGetVkey",
-      param:{
-        guid:"1498212784",
-        songmid:["004e6hUt0CvgUS"],
-        songtype:[0],
-        uin:"0",
-        loginflag:1,
-        platform:"20"
-      }
-    }
-  }
-  let str =JSON.stringify(data)    
-  return Axios({
-    methods:'get',
-    url:`it120/api/transmit/704?data=${encodeURIComponent(str,'utf-8')}`,
-    data:data
-  })
-}
+//qq 歌词

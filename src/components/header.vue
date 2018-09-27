@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import { IT120_WEATHER, IT120_ROBOT,IT120_QQMUSIC_VKEY} from '@/assets/api/index.js'
-import { getExpress } from '@/static/js/index.js'
+import { IT120_WEATHER, IT120_ROBOT,IT120_QQMUSIC_NEW} from '@/assets/api/index.js'
+import { getExpress,musicUrl} from '@/static/js/index.js'
 
 export default {
   name:'Header',
@@ -52,12 +52,11 @@ export default {
   },
   mounted() {
     this.init();
-
-    IT120_QQMUSIC_VKEY().then(res=>{
+    IT120_QQMUSIC_NEW().then(res=>{
       console.log(res)
-    }).catch(err=>{
-      console.log(err)
     })
+    let url=musicUrl("001Q3Rlo428b8g")
+    console.log(url)
   },
   methods:{
     init(){
