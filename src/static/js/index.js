@@ -30,5 +30,22 @@ export const getColor=(time=0)=>{
   }
 }
 
+export const getExpress=()=>{
+  return{
+    申通:"shentong",
+    EMS:"ems",
+    顺丰:"shunfeng",
+    圆通:"yuantong",
+    中通:"zhongtong",
+    韵达:"yunda",
+    天天:"tiantian",
+    汇通:"huitongkuaidi",
+    全峰:"quanfengkuaidi",
+    德邦:"debangwuliu",
+    宅急送:"zhaijisong",
+  }
+}
+
+
 
 

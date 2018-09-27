@@ -34,9 +34,9 @@ import {getTime,getColor} from '@/static/js/index.js'
         },
         mounted() {
             this.$router.push('/zhihu')
-            console.log(getColor(19));
+            // console.log(getColor(19));
             // this.style=`background:${getColor(19).color};`
-            console.log(this.style)
+            // console.log(this.style)
         },
        
     }
