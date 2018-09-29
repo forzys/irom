@@ -12,7 +12,6 @@
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
             </transition>
         </div>
-
        <Footer />
     </div>
 </template>
@@ -49,6 +48,7 @@ import {getTime,getColor} from '@/static/js/index.js'
     .home .main{
         width:100%;
         max-width:800px;
+        overflow: hidden;
         margin:0 auto;
     }
  </style>

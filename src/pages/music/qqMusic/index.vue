@@ -12,7 +12,7 @@
         </a>
         <CellGroup>
             <Cell v-for="(v,i) in item.songlist.slice(0, 5)" :key="i">
-                <Icon type="ios-play-outline" @click="play(v.data.songmid)"/>
+                <Icon type="ios-play-outline" @click="play(v.data.songmid,v.data.songid,v.data.songtype)"/>
                 <Icon type="ios-film-outline" v-if="!!v.data.vid" @click="playMv(vid)"/>
 
                <span>{{v.data.songname}}</span>
@@ -42,6 +42,7 @@ import {
   IT120_QQMUSIC_NEW,
   IT120_QQMUSIC_HOT,
   IT120_QQMUSIC_URL,
+  IT120_QQMUSIC_LRC,
   IT120_QQMV_SHOUBO
 } from '@/assets/api/index.js'
 export default {
@@ -50,12 +51,16 @@ export default {
     return{
       data:'',
       songList:[],
+      audio:null,
     }
   },
   mounted() {
+    let audio=new Audio()
+    this.audio=audio;
     this.init();
   },
   methods:{
+   
     init(){
       let list=localStorage.getItem('qqmusic-top-list')
       //判断本地存储数据是否存在
@@ -111,19 +116,23 @@ export default {
         localStorage.clear()
       }
     },
-    play(songmid){
+    play(songmid,songid,type){
       IT120_QQMUSIC_URL(songmid).then(res=>{
         console.log(res)
-        console.log(res)
-        let url=[]
-        url.push({url:`http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`})
-        res.data.data.sip.forEach(item => {
-          url.push({
-            url:item+res.data.data.midurlinfo[0].purl
-          })
-        });
-        console.log(url)
-      }).catch(error=>{
+        let url=`http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`
+        // res.data.data.sip.forEach(item => {
+        //   url.push("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
+        // });
+        this.audio.src=url
+        this.audio.play();
+      }).then(res=>{
+        IT120_QQMUSIC_LRC(songid,type).then(res=>{
+          console.log(res)
+        }).catch(error=>{
+          console.log(error)
+        })
+      })
+      .catch(error=>{
         console.log(error)
       })
     },
@@ -136,25 +145,26 @@ export default {
 </script>
 
 <style>
-.f-right{
-  float: right;
+.music-1{
+  width:100%;
+  overflow: hidden;
 }
-
-
 .top-list{
-  display: flex;
+  width:90%;
+  margin:0 auto;
 }
 .card{
-  width:350px;
+  max-width:350px;
+  min-width:300px;
   height:420px;
-  display: inline-block;
-  margin:10px;
+  margin:10px auto;
 }
 .card .title{
   text-align: center;
 }
 .card .content{
-  display: inline-block;
+  width:100%;
+  overflow: hidden;
 }
 .card .content img{
   width:100%;
@@ -166,5 +176,4 @@ export default {
   margin:0 10px;
   text-align: center;
 }
-
 </style>

@@ -74,6 +74,7 @@ export default {
           night_wind:result.days.day[0].night_wind_type+result.days.day[0].night_wind_power,
         };
         this.weather=obj
+        console.log(res)
         result=null
         obj=null
       }).catch(err=>{

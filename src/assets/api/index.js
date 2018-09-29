@@ -109,14 +109,19 @@ export function IT120_QQMUSIC_HOT(begin=0,num=30){
   })
 }
 //qq 歌词
-export function IT120_QQMUSIC_LRC(id){
+export function IT120_QQMUSIC_LRC(id,type){
+  let g_SongData={
+    type:type
+  }
+  var url = "it120/api/transmit/707?nobase64=1&musicid=" + id + "&callback=jsonp1" + ((g_SongData.songtype == 111 || g_SongData.songtype == 112 || g_SongData.songtype == 113) ? ('&songtype=' + g_SongData.songtype) : '');
+  console.log(url)
   let xml=`http://music.qq.com/miniportal/static/lyric/${id%100}/${id}.xml`
   // let url=`http://query.yahooapis.com/v1/public/yql?q=select*from%20x÷ml%20where%20url=${xml}&format=json&diagnostics=true&callback=?`
   let YqlUrl='http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D"'+xml+'"&format=json&diagnostics=true&callback=?'
   console.log(xml)
   return Axios({
     methods:'get',
-    url:YqlUrl
+    url:url
   })
 }
 // musicImgbase vkey 弃用
