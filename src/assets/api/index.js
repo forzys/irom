@@ -1,4 +1,5 @@
 import Axios from './config.js'
+import { musicImg } from '../../static/js/index.js';
 
 
 /**
@@ -68,6 +69,7 @@ export function IT120_KUAIDI(fac='shunfeng',id){
     url:`/it120/api/transmit/699?type=${fac}&postid=${id}`
   }) 
 }
+//较慢；响应时间4s左右
 //自动机器人 天气、翻译、藏头诗、笑话、歌词、计算、域名信息/备案/收录查询、IP查询、手机号码归属、人工智能聊天。
 export function IT120_ROBOT(query){
   return Axios({
@@ -75,6 +77,15 @@ export function IT120_ROBOT(query){
     url:`/it120/api/transmit/700?key=free&appid=0&msg=${query}`
   }) 
 }
+//较快；响应时间0.9s左右
+//自动机器人 只能聊天
+export function IT120_ROBOT2(query){
+  return Axios({
+    methods:'get',
+    url:`/it120/api/transmit/706?search=${query}`
+  }) 
+}
+///////////////////qq专区////////////////////////////////////
 //qq音乐搜索
 export function IT120_QQMUSIC_SEARCH(num=10,name){
   console.log(num,name)
@@ -98,3 +109,62 @@ export function IT120_QQMUSIC_HOT(begin=0,num=30){
   })
 }
 //qq 歌词
+export function IT120_QQMUSIC_LRC(id){
+  let xml=`http://music.qq.com/miniportal/static/lyric/${id%100}/${id}.xml`
+  // let url=`http://query.yahooapis.com/v1/public/yql?q=select*from%20x÷ml%20where%20url=${xml}&format=json&diagnostics=true&callback=?`
+  let YqlUrl='http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D"'+xml+'"&format=json&diagnostics=true&callback=?'
+  console.log(xml)
+  return Axios({
+    methods:'get',
+    url:YqlUrl
+  })
+}
+// musicImgbase vkey 弃用
+// http://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid=0
+// export function IT120_QQMUSIC_VKEY(){
+//   return Axios({
+//     methods:'get',
+//     url:`it120/api/transmit/704?json=3&guid=0&format=json`
+//   })
+// }
+
+// MUSIC URL
+export function IT120_QQMUSIC_URL(songmid="000yB0Dc1mwtra",guid="2763071988"){
+  let data={
+      data:{
+        module:"vkey.GetVkeyServer",
+        method:"CgiGetVkey",
+        param:{
+          guid:guid,
+          songmid:[songmid],
+          songtype:[0],
+          loginflag:1,
+          uin:'0',
+          platform:'20'
+        }
+      }
+    }
+  return Axios({
+    methods:'get',
+    url:`qq/cgi-bin/musicu.fcg?data=${JSON.stringify(data)}`
+  })
+}
+// qq 获取mv URL
+// https://c.y.qq.com/mv/fcgi-bin/getmv_by_tag?cmd=shoubo&lan=all
+export function IT120_QQMV_SHOUBO(vids="l0027z1nbe8"){
+  let data={
+    getMvUrl:{
+      module:"gosrf.Stream.MvUrlProxy",
+      method:"GetMvUrls",
+      param:{
+        vids:[vids],
+        request_typet:10001
+      }
+    }
+  }
+  return Axios({
+    methods:'get',
+    url:`qq/cgi-bin/musicu.fcg?data=${JSON.stringify(data)}`
+  })
+}
+///////////////////////////////////////////////////////end//////////////////////////

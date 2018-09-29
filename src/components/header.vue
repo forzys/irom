@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { IT120_WEATHER, IT120_ROBOT,IT120_QQMUSIC_NEW} from '@/assets/api/index.js'
+import { IT120_WEATHER, IT120_ROBOT,IT120_QQMUSIC_NEW,IT120_QQMV_SHOUBO,IT120_QQMUSIC_URL,IT120_QQMUSIC_LRC} from '@/assets/api/index.js'
 import { getExpress,musicUrl} from '@/static/js/index.js'
 
 export default {
@@ -47,16 +47,15 @@ export default {
     return{
       count:1,
       weather:'',
-      notice:'这里获取到信息'
+      notice:'这里获取到信息',
+      key:'',
     }
   },
   mounted() {
     this.init();
-    IT120_QQMUSIC_NEW().then(res=>{
+    IT120_QQMV_SHOUBO().then(res=>{
       console.log(res)
     })
-    let url=musicUrl("001Q3Rlo428b8g")
-    console.log(url)
   },
   methods:{
     init(){

@@ -25,6 +25,13 @@ module.exports = {
             '^/zhihu':'/'
         }
       },
+      '/qq':{
+        target: 'https://u.y.qq.com/',
+        changeOrigin: true,
+        pathRewrite:{
+            '^/qq':'/'
+        }
+      }
       
 
     },

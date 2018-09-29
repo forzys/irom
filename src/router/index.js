@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Detail from '@/pages/books/zhihu/detail.vue'
 import Zhihu from '@/pages/books/zhihu/'
+import QQmusic from '@/pages/music/qqMusic/'
 
 Vue.use(Router)
 
@@ -24,7 +25,14 @@ export default new Router({
           name:'Detail',
           component: Detail,
           meta: {keepAlive: false}// 不需要缓存
+        },
+        {
+          path:'/qqmusic',
+          name:'qqMusic',
+          component: QQmusic,
+          meta: {keepAlive: false}// 不需要缓存
         }
+
       ]
     }
 

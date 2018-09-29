@@ -1,5 +1,4 @@
 
-
 export const getTime=()=>{
   let time=new Date(),
   year=time.getFullYear(),
@@ -29,7 +28,7 @@ export const getColor=(time=0)=>{
     all:color
   }
 }
-
+//快递拼音
 export const getExpress=()=>{
   return{
     申通:"shentong",
@@ -50,6 +49,17 @@ export const musicUrl = (songmid) => {
   let url = `http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`
   return url
 }
+
+export const musicImg = (imgId,width=300) => {
+  let url = `http://imgcache.qq.com/music/photo/album_${width}/${imgId%100}/${width}_albumpic_${imgId}_0.jpg`
+  return url
+}
+
+export const musicPlay =()=>{
+  
+}
+
+
 
 
 
