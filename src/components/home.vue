@@ -1,7 +1,6 @@
 <template>
     <div :style="style" class="home">
        <Header />
-
         <div class="main">
             <transition name="fade">
                 <keep-alive>
@@ -13,6 +12,11 @@
             </transition>
         </div>
        <Footer />
+
+       <!-- 全局功能区 -->
+       <audio :src="src" autoplay @ended="ended" @pause="loop">
+           您的浏览器不支持audio标签播放音频呢
+       </audio>
     </div>
 </template>
 <script>
@@ -28,7 +32,8 @@ import {getTime,getColor} from '@/static/js/index.js'
         },
         data(){
             return{
-                style:null
+                style:null,
+                src:'',
             }
         },
         mounted() {
@@ -37,6 +42,14 @@ import {getTime,getColor} from '@/static/js/index.js'
             // this.style=`background:${getColor(19).color};`
             // console.log(this.style)
         },
+        methods:{
+            alert(){
+                alert('您的浏览器不支持audio')
+            },
+            ended(){
+                console.log('ended')
+            }
+        }
        
     }
 </script>

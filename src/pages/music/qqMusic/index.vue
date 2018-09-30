@@ -1,19 +1,22 @@
 <template>
   <div class="music-1">
-    <div class="top-list">
-       <Card v-for="(item,index) in songList" :key="index" class="card">
+    <transition name="fade">
+    <!-- 榜单 -->
+    <div class="top-list" v-show="isTopShow">
+      
+      <Card v-for="(item,index) in songList" :key="index" class="card">
         <p slot="title" class="title">
             <Icon type="ios-musical-notes" />
             {{item.title}}
             <Badge :count="30" slot="extra" />
         </p>
         <a href="#" @click.prevent="init" class="content">
-            <img :src="item.pic" alt="">
+            <img :src="item.pic" alt="" @click="isShow(index)">
         </a>
         <CellGroup>
             <Cell v-for="(v,i) in item.songlist.slice(0, 5)" :key="i">
                 <Icon type="ios-play-outline" @click="play(v.data.songmid,v.data.songid,v.data.songtype)"/>
-                <Icon type="ios-film-outline" v-if="!!v.data.vid" @click="playMv(vid)"/>
+                <Icon type="ios-film-outline" v-if="!!v.data.vid" @click="playMv(v.data.vid)"/>
 
                <span>{{v.data.songname}}</span>
                <span>{{v.data.singer[0].name||'未知'}}</span>
@@ -31,8 +34,14 @@
         <p v-if="!!item.error">
           {{item.error}}
         </p>
-    </Card>
+      </Card>
     </div>
+    </transition>
+    <!-- 榜单end -->
+    <!-- 列表 -->
+     <transition name="fade">
+       <MusicList v-if="isListShow" :data="list" />
+    </transition>
   </div>
 </template>
 
@@ -45,13 +54,20 @@ import {
   IT120_QQMUSIC_LRC,
   IT120_QQMV_SHOUBO
 } from '@/assets/api/index.js'
+import MusicList from '@/components/list.vue'
 export default {
   name:'qqMusic',
+  components:{
+    MusicList
+  },
   data(){
     return{
       data:'',
       songList:[],
+      list:[],
       audio:null,
+      isTopShow:true,
+      isListShow:false,
     }
   },
   mounted() {
@@ -116,29 +132,61 @@ export default {
         localStorage.clear()
       }
     },
+
+
+
     play(songmid,songid,type){
-      IT120_QQMUSIC_URL(songmid).then(res=>{
+      //构造Url（可绕过版权和登陆限制）
+      let url=`http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`
+
+      // IT120_QQMUSIC_URL(songmid).then(res=>{
+
+      //   // res.data.data.sip.forEach(item => {
+      //   //   url.push("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
+      //   // });
+      //   this.audio.src=url
+      //   // this.audio.load();
+      //   this.audio.play();
+      // }).catch(error=>{
+      //   console.log(error)
+      // })
+    },
+
+
+
+    playMv(vid){
+      IT120_QQMV_SHOUBO(vid).then(res=>{
         console.log(res)
-        let url=`http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`
-        // res.data.data.sip.forEach(item => {
-        //   url.push("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
-        // });
-        this.audio.src=url
-        this.audio.play();
-      }).then(res=>{
-        IT120_QQMUSIC_LRC(songid,type).then(res=>{
-          console.log(res)
-        }).catch(error=>{
-          console.log(error)
-        })
-      })
-      .catch(error=>{
+
+      }).catch(error=>{
         console.log(error)
       })
     },
-    playMv(vid){
+    isShow(id){
+      console.log(id)
+      //清洗数据
+      if(!!String(id)){
+        let arr=[];
+        this.songList[id].songlist.forEach(ele => {
+          arr.push({
+            name:ele.data.songname,
+            id:ele.data.songid,
+            mid:ele.data.songmid,
+            vid:ele.data.vid,
+            singer:ele.data.singer[0].name,
+            interval:ele.data.interval,
+            url:`http://ws.stream.qqmusic.qq.com/C100${ele.data.songmid}.m4a?fromtag=0&guid=0`,
+          })
+        });
+        this.list=arr
+        arr=null
+        this.isListShow=!this.isListShow
+        console.log(this.list)
+      }
 
+      this.isTopShow=!this.isTopShow
     }
+    
 
   }
 }
