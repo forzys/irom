@@ -12,11 +12,6 @@
             </transition>
         </div>
        <Footer />
-
-       <!-- 全局功能区 -->
-       <audio :src="src" autoplay @ended="ended" @pause="loop">
-           您的浏览器不支持audio标签播放音频呢
-       </audio>
     </div>
 </template>
 <script>
@@ -43,12 +38,7 @@ import {getTime,getColor} from '@/static/js/index.js'
             // console.log(this.style)
         },
         methods:{
-            alert(){
-                alert('您的浏览器不支持audio')
-            },
-            ended(){
-                console.log('ended')
-            }
+           
         }
        
     }
