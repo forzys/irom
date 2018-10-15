@@ -11,6 +11,7 @@
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
             </transition>
         </div>
+        <!-- 歌曲 -->
        <Footer />
     </div>
 </template>
@@ -32,7 +33,7 @@ import {getTime,getColor} from '@/static/js/index.js'
             }
         },
         mounted() {
-            this.$router.push('/zhihu')
+            // this.$router.push('/zhihu')
             // console.log(getColor(19));
             // this.style=`background:${getColor(19).color};`
             // console.log(this.style)

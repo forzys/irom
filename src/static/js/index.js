@@ -47,6 +47,7 @@ export const getExpress=()=>{
 
 export const musicUrl = (songmid) => {
   let url = `http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`
+  console.log('歌曲播放地址',url)
   return url
 }
 

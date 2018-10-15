@@ -2,7 +2,6 @@
   <nav class="header">
       <div></div>
       <div class="right">
-
        <!-- 天气 -->
         <span>
           <Dropdown trigger="click" transfer>
@@ -27,6 +26,11 @@
         <span >
           <Icon type="ios-settings-outline" size="22" />
         </span>
+        <!-- 音乐 -->
+        <span @click="getPlayingMusic">
+          <Icon type="ios-musical-notes-outline" size="22"/>
+        </span>
+        <!-- 通知 -->
         <span @click="getNotice">
             <Badge dot :count="count">
                <Icon type="md-bulb" size="22" />
@@ -48,6 +52,7 @@ export default {
       count:1,
       weather:'',
       notice:'这里获取到信息',
+      playing:'',
       key:'',
     }
   },
@@ -74,22 +79,43 @@ export default {
           night_wind:result.days.day[0].night_wind_type+result.days.day[0].night_wind_power,
         };
         this.weather=obj
-        console.log(res)
         result=null
         obj=null
       }).catch(err=>{
         console.log(err)
         this.$Message.error({content:'哎呀，出错了',duration: 3});
       })
-      //获取通知
-
     },
+    //获取通知
     getNotice(){
       this.$Notice.open({
           title: this.notice.title||'通知',
           desc: this.count==0? '  暂时没有最新通知呢亲！' : this.notice
       });
       this.count=0;
+    },
+    getPlayingMusic(){
+      let a = 'hello'
+      this.$Notice.open({
+        title: this.playing.title||'音乐',
+        desc: '没有正在播放的音乐哦🎵',
+        duration:0,
+        render:h=>{
+          return (<div style="width:100%">
+                    <span style="float:left;">
+                        <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3156704277,4221589279&fm=96" style="width:100%;height:100%" />
+                    </span>
+                    <span style="overflow:hidden">
+                        <span style="overflow:hidden">
+                            <i class="ivu-icon ivu-icon-md-skip-backward" style="font-size:18px"/>
+                            <i class="ivu-icon ivu-icon-md-pause" style="font-size:18px"/>
+                            <i class="ivu-icon ivu-icon-md-skip-forward" style="font-size:18px"/>
+                        </span>
+                    </span>
+                  </div>
+              )
+        }
+      });
     }
   },
 }
