@@ -14,7 +14,7 @@
        <Footer />
 
        <!-- 全局功能区 -->
-       <audio :src="src" autoplay @ended="ended" @pause="loop">
+       <audio id="audio-player" :src="src" autoplay @ended="ended" @pause="loop">
            您的浏览器不支持audio标签播放音频呢
        </audio>
     </div>
@@ -22,8 +22,9 @@
 <script>
 import Header from './header.vue'
 import Footer from './footer.vue'
-// import TimeLine from '@/pages/timeLine/index.vue'
 import {getTime,getColor} from '@/static/js/index.js'
+// import {audioPlayer} from '@/static/js/player.js'
+
     export default{
         name:'Home',
         components:{
@@ -37,6 +38,7 @@ import {getTime,getColor} from '@/static/js/index.js'
             }
         },
         mounted() {
+            // audioPlayer()
             this.$router.push('/zhihu')
             // console.log(getColor(19));
             // this.style=`background:${getColor(19).color};`
@@ -45,6 +47,9 @@ import {getTime,getColor} from '@/static/js/index.js'
         methods:{
             alert(){
                 alert('您的浏览器不支持audio')
+            },
+            loop(){
+                console.log('loop')
             },
             ended(){
                 console.log('ended')

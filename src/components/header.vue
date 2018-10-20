@@ -61,7 +61,7 @@ export default {
     init(){
       //获取天气信息
       IT120_WEATHER().then(res=>{
-        let result=res.data.result.data
+        let result=res.result.data
         let obj={
           name:result.info.name,
           air:result.air.description,

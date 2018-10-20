@@ -31,6 +31,14 @@ module.exports = {
         pathRewrite:{
             '^/qq':'/'
         }
+      }, 
+      //https: //interface.sina.cn/dfz/outside/ipdx/weather.d.html?length=1&air=1&callback=
+      '/weather':{
+          target: 'https://interface.sina.cn/dfz/outside/',
+            changeOrigin: true,
+            pathRewrite: {
+              '^/weather': '/'
+            }
       }
       
 

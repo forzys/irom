@@ -144,9 +144,9 @@ export default {
       //   // res.data.data.sip.forEach(item => {
       //   //   url.push("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
       //   // });
-      //   this.audio.src=url
-      //   // this.audio.load();
-      //   this.audio.play();
+        this.audio.src=url
+        this.audio.load();
+        this.audio.play();
       // }).catch(error=>{
       //   console.log(error)
       // })

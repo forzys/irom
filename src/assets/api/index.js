@@ -52,7 +52,8 @@ export function ZHIHUEXTRA(id){
 export function IT120_WEATHER(){
   return Axios({
     methods:'get',
-    url:`/it120/api/transmit/698`
+    // url:`/it120/api/transmit/698`
+    url: `/weather/ipdx/weather.d.html?length=1&air=1&callback=`
   }) 
 }
 //sina HotWord
