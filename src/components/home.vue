@@ -11,18 +11,17 @@
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
             </transition>
         </div>
+        <!-- 歌曲 -->
        <Footer />
-
-       <!-- 全局功能区 -->
-       <audio id="audio-player" :src="src" autoplay @ended="ended" @pause="loop">
-           您的浏览器不支持audio标签播放音频呢
-       </audio>
+       <div>
+           <audio id="music-play" data-src="" src=""></audio>
+       </div>
     </div>
 </template>
 <script>
 import Header from './header.vue'
 import Footer from './footer.vue'
-import {getTime,getColor} from '@/static/js/index.js'
+import {getTime,getColor,getQiniuToken} from '@/static/js/index.js'
 // import {audioPlayer} from '@/static/js/player.js'
 
     export default{
@@ -39,21 +38,14 @@ import {getTime,getColor} from '@/static/js/index.js'
         },
         mounted() {
             // audioPlayer()
-            this.$router.push('/zhihu')
+            getQiniuToken()
+            // this.$router.push('/zhihu')
             // console.log(getColor(19));
             // this.style=`background:${getColor(19).color};`
             // console.log(this.style)
         },
         methods:{
-            alert(){
-                alert('您的浏览器不支持audio')
-            },
-            loop(){
-                console.log('loop')
-            },
-            ended(){
-                console.log('ended')
-            }
+           
         }
        
     }
@@ -67,6 +59,6 @@ import {getTime,getColor} from '@/static/js/index.js'
         width:100%;
         max-width:800px;
         overflow: hidden;
-        margin:0 auto;
+        margin:60px auto;
     }
  </style>

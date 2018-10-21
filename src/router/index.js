@@ -15,6 +15,12 @@ export default new Router({
       component: Home,
       children:[
         {
+          path:'/qqmusic',
+          name:'qqMusic',
+          component: QQmusic,
+          meta: {keepAlive: false}// 不需要缓存
+        },
+        {
           path:'/zhihu',
           name:'Zhihu',
           component:Zhihu,
@@ -26,13 +32,6 @@ export default new Router({
           component: Detail,
           meta: {keepAlive: false}// 不需要缓存
         },
-        {
-          path:'/qqmusic',
-          name:'qqMusic',
-          component: QQmusic,
-          meta: {keepAlive: false}// 不需要缓存
-        }
-
       ]
     }
 

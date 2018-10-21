@@ -3,7 +3,6 @@
     <transition name="fade">
     <!-- 榜单 -->
     <div class="top-list" v-show="isTopShow">
-      
       <Card v-for="(item,index) in songList" :key="index" class="card">
         <p slot="title" class="title">
             <Icon type="ios-musical-notes" />
@@ -40,7 +39,7 @@
     <!-- 榜单end -->
     <!-- 列表 -->
      <transition name="fade">
-       <MusicList v-if="isListShow" :data="list" />
+       <MusicList v-if="isListShow" :data="list" :title="title" @back="mback"/>
     </transition>
   </div>
 </template>
@@ -63,12 +62,14 @@ export default {
   data(){
     return{
       data:'',
+      title:'',
       songList:[],
       list:[],
       audio:null,
       isTopShow:true,
       isListShow:false,
     }
+   
   },
   mounted() {
     let audio=new Audio()
@@ -76,7 +77,6 @@ export default {
     this.init();
   },
   methods:{
-   
     init(){
       let list=localStorage.getItem('qqmusic-top-list')
       //判断本地存储数据是否存在
@@ -132,13 +132,15 @@ export default {
         localStorage.clear()
       }
     },
-
-
+    mback(){
+      this.isListShow=false;
+      this.isTopShow=true;
+    },
 
     play(songmid,songid,type){
       //构造Url（可绕过版权和登陆限制）
       let url=`http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`
-
+      
       // IT120_QQMUSIC_URL(songmid).then(res=>{
 
       //   // res.data.data.sip.forEach(item => {
@@ -163,7 +165,6 @@ export default {
       })
     },
     isShow(id){
-      console.log(id)
       //清洗数据
       if(!!String(id)){
         let arr=[];
@@ -176,18 +177,16 @@ export default {
             singer:ele.data.singer[0].name,
             interval:ele.data.interval,
             url:`http://ws.stream.qqmusic.qq.com/C100${ele.data.songmid}.m4a?fromtag=0&guid=0`,
+            pic:`http://imgcache.qq.com/music/photo/album_300/${ele.data.albumid%100}/300_albumpic_${ele.data.albumid}_0.jpg`,
           })
         });
         this.list=arr
+        this.title=this.songList[id].title
         arr=null
         this.isListShow=!this.isListShow
-        console.log(this.list)
       }
-
       this.isTopShow=!this.isTopShow
     }
-    
-
   }
 }
 </script>
@@ -206,6 +205,7 @@ export default {
   min-width:300px;
   height:420px;
   margin:10px auto;
+  display:inline-block;
 }
 .card .title{
   text-align: center;
@@ -223,5 +223,8 @@ export default {
 .card .ivu-cell span{
   margin:0 10px;
   text-align: center;
+}
+.card:nth-child(1){
+  margin:10px;
 }
 </style>

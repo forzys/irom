@@ -1,1 +1,27 @@
 https://news-at.zhihu.com/api
+
+
+
+background: #b4a078 radial-gradient(at 30% 30%, #f7f5f1, #b4a078);
+animation: bounce 1.5s cubic-bezier(.1,.25,1,.25) forwards; /* 当动画完成后，保持最后一帧 */
+
+@keyframes bounce {
+  40%,
+  60%,
+  80%,
+  to {
+      transform: translateY(380px);
+      animation-timing-function: ease-in;
+  }
+  50% {
+      transform: translateY(290px);
+  }
+  70% {
+      transform: translateY(360px);
+  }
+  90% {
+      transform: translateY(370px);
+  }
+}
+ak:xnEJB073ccy3BwkhbMKr8oMkahazJrKGTqqz5S7a
+sk:wHyCCk7HlsUhyhrMBzt7RZXrZLtgX7dDu1akRXPr
