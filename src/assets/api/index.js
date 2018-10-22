@@ -52,7 +52,8 @@ export function ZHIHUEXTRA(id){
 export function IT120_WEATHER(){
   return Axios({
     methods:'get',
-    url:`/it120/api/transmit/698`
+    // url:`/it120/api/transmit/698`
+    url: `/weather/ipdx/weather.d.html?length=1&air=1&callback=`
   }) 
 }
 //sina HotWord
@@ -62,6 +63,13 @@ export function IT120_HOTWORD(){
     url:`/it120/api/transmit/697`
   }) 
 }
+export function IT120_GETNOTICE(){
+  return Axios({
+    methods: 'get', 
+    url: `/it120/notice/last-one`
+  }) 
+}
+
 //快递?type=快递公司代号&postid=快递单号
 export function IT120_KUAIDI(fac='shunfeng',id){
   return Axios({

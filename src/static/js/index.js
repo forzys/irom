@@ -1,3 +1,6 @@
+import {
+  hex_hmac_sha1
+} from './sha1.js'
 
 export const getTime=()=>{
   let time=new Date(),
@@ -58,6 +61,12 @@ export const musicImg = (imgId,width=300) => {
 
 export const musicPlay =()=>{
   
+}
+
+export const getQiniuToken=()=>{
+  let ak= 'xnEJB073ccy3BwkhbMKr8oMkahazJrKGTqqz5S7a'
+  let sk= 'wHyCCk7HlsUhyhrMBzt7RZXrZLtgX7dDu1akRXPr'
+ let sha1= hex_hmac_sha1('MY_SECRET_KEY', 'eyJzY29wZSI6Im15LWJ1Y2tldDpzdW5mbG93ZXIuanBnIiwiZGVhZGxpbmUiOjE0NTE0OTEyMDAsInJldHVybkJvZHkiOiJ7XCJuYW1lXCI6JChmbmFtZSksXCJzaXplXCI6JChmc2l6ZSksXCJ3XCI6JChpbWFnZUluZm8ud2lkdGgpLFwiaFwiOiQoaW1hZ2VJbmZvLmhlaWdodCksXCJoYXNoXCI6JChldGFnKX0ifQ==')
 }
 
 
