@@ -9,7 +9,7 @@
               <DropdownMenu slot="list" v-show="!!weather">
                   <DropdownItem disabled>
                     <p>{{weather.name}}</p>
-                    <div>空气:{{weather.air}}  pm2.5:{{weather.pm25}}</div>
+                    <div> 空气: {{weather.air}}  pm2.5:{{weather.pm25}}</div>
                     <span>白天：</span>
                     <div>
                       {{weather.day_temperature}}℃  {{weather.day_weather}}  {{weather.day_wind}} 
@@ -27,7 +27,7 @@
           <Icon type="ios-settings-outline" size="22" />
         </span>
         <!-- 音乐 -->
-        <span @click="getPlayingMusic">
+        <span @click="playingMusicNotice">
           <Icon type="ios-musical-notes-outline" size="22"/>
         </span>
         <!-- 通知 -->
@@ -42,8 +42,15 @@
 </template>
 
 <script>
-import { IT120_WEATHER, IT120_ROBOT,IT120_QQMUSIC_NEW,IT120_QQMV_SHOUBO,IT120_QQMUSIC_URL,IT120_QQMUSIC_LRC} from '@/assets/api/index.js'
-import { getExpress,musicUrl} from '@/static/js/index.js'
+import { 
+  IT120_WEATHER, 
+  IT120_ROBOT, 
+  IT120_QQMUSIC_NEW, 
+  IT120_QQMV_SHOUBO,
+  IT120_QQMUSIC_URL,
+  IT120_QQMUSIC_LRC
+} from '@/assets/api/index.js'
+import { getExpress, musicUrl } from '@/static/js/index.js'
 
 export default {
   name:'Header',
@@ -52,7 +59,12 @@ export default {
       count:1,
       weather:'',
       notice:'这里获取到信息',
-      playing:'',
+      playing:{
+        title:'音乐',
+        status:false,
+        playing:true,
+        img:'http://p1.music.126.net/RnOZHM0BNxXuy-RwQQI5BA==/3313928048221849.jpg?param=140y140',
+      },
       key:'',
     }
   },
@@ -61,6 +73,11 @@ export default {
     IT120_QQMV_SHOUBO().then(res=>{
       console.log(res)
     })
+    
+    window.play = (w)=>{
+      this.play(w)
+    }
+
   },
   methods:{
     init(){
@@ -94,27 +111,60 @@ export default {
       });
       this.count=0;
     },
-    getPlayingMusic(){
-      let a = 'hello'
+    // 播放音乐相关
+    play(w){
+      if(w=='play'||w=='pause'){
+        this.playing.status=!this.playing.status
+      }
+      if(w=='last'){
+      }
+      if(w=='next'){
+      }
+
+      setTimeout(()=>{
+        this.$Notice.close('playMusic');
+        this.playingMusicNotice();
+      },300)
+    },
+    playingMusicNotice(){
       this.$Notice.open({
-        title: this.playing.title||'音乐',
+        name:'playMusic',
+        title:this.playing.title,
         desc: '没有正在播放的音乐哦🎵',
         duration:0,
         render:h=>{
-          return (<div style="width:100%">
-                    <span style="float:left;">
-                        <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3156704277,4221589279&fm=96" style="width:100%;height:100%" />
-                    </span>
-                    <span style="overflow:hidden">
-                        <span style="overflow:hidden">
-                            <i class="ivu-icon ivu-icon-md-skip-backward" style="font-size:18px"/>
-                            <i class="ivu-icon ivu-icon-md-pause" style="font-size:18px"/>
-                            <i class="ivu-icon ivu-icon-md-skip-forward" style="font-size:18px"/>
-                        </span>
-                    </span>
+          return (
+            <div>
+              {
+                !!this.playing.playing?
+                <div style="width:100%;padding:5px;">
+
+                  <span style="float:left;width:80px;height:60px;">
+                      <img src={this.playing.img} style="width:100%;height:100%;border-radius:5px;" />
+                  </span>
+
+                  <div style="overflow:hidden;display:flex;height:60px;">
+                      <span style="margin:auto;">
+                          <i class="ivu-icon ivu-icon-md-skip-backward" onclick="play('last')" style="font-size:22px;"/>
+                          {
+                            !!this.playing.status?
+                            <i class="ivu-icon ivu-icon-md-pause" onclick="play('play')" style="font-size:22px;margin:0 30px;"/>
+                            :<i class="ivu-icon ivu-icon-md-play" onclick="play('pause')" style="font-size:22px;margin:0 30px;"/>
+                          }
+                          <i class="ivu-icon ivu-icon-md-skip-forward" onclick="play('next')" style="font-size:22px;"/>
+                      </span>
                   </div>
-              )
-        }
+
+                </div>
+                :<span>
+                  <a onclick="play('exit')">
+                    没有正在播放的音乐哦🎵
+                  </a>
+                </span>
+              }
+            </div>
+          )
+        },
       });
     }
   },
