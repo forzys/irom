@@ -5,8 +5,8 @@
       <CellGroup>
         <div class="title">{{title}}</div>
         <Cell v-for="(v,i) in data" :key="i">
-              <Icon type="ios-play-outline" @click="play(v)"/>
-              <Icon type="ios-film-outline" v-if="!!v.vid" @click="playMv(v.vid)"/>
+              <Icon type="ios-play-outline" @click="$emit('play',v)"/>
+              <Icon type="ios-film-outline" v-if="!!v.vid" @click="$emit('mvPlay',v.vid)"/>
               <span>{{v.name}}</span>
               <span>{{v.singer||'未知'}}</span>
               <small slot="extra">
@@ -35,13 +35,7 @@ export default {
   mounted() {
   },
   methods:{
-    play(v){
-      let dom = document.getElementById('music-play')
-      dom.setAttribute('data-src',JSON.stringify(v))
-    },
-    playMv(v){
-      this.$emit('mvPlay')
-    },
+    
   }
 }
 </script>

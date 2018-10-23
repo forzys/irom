@@ -63,10 +63,10 @@ export function IT120_HOTWORD(){
     url:`/it120/api/transmit/697`
   }) 
 }
-export function IT120_GETNOTICE(){
+export function IT120_GETNOTICE(n=0){
   return Axios({
     methods: 'get', 
-    url: `/it120/notice/last-one`
+    url: `/it120/notice/${!n?'last-one':'list'}`
   }) 
 }
 

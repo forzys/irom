@@ -39,7 +39,7 @@
     <!-- 榜单end -->
     <!-- 列表 -->
      <transition name="fade">
-       <MusicList v-if="isListShow" :data="list" :title="title" @back="mback" @mvPlay="mvPlay" />
+       <MusicList v-if="isListShow" :data="list" :title="title" @back="mback" @mvPlay="mvPlay" @play="play" />
     </transition>
      <transition name="fade">
       <Modal
@@ -55,7 +55,7 @@
           </div> -->
           <!-- 播放主体 -->
           <div class="video-modal" style="width:100%">
-            <video v-if="video.isShow" :src="video.arr[video.i]" width="100%" height="200" :onerror="videoErr" controls>
+            <video v-if="video.isShow" autoplay :src="video.arr[video.i]" width="100%" height="200" :onerror="videoErr" controls>
               浏览器不支持 Video 播放器
             </video>
           </div>
@@ -140,28 +140,25 @@ export default {
     play(v){
       //构造Url（可绕过版权和登陆限制）
       // let url=`http://ws.stream.qqmusic.qq.com/C100${v.data.songmid}.m4a?fromtag=0&guid=0`
-      // IT120_QQMUSIC_URL(songmid).then(res=>{
-      //   // res.data.data.sip.forEach(item => {
-      //   //   url.push("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
-      //   // });
-        // this.audio.src=url
-        // this.audio.load();
-        // this.audio.play();
-      // }).catch(error=>{
-        // console.log(v)
-      // })
-      let dom = document.getElementById('music-play')
-      let arr={
-        name:v.songname,
-        id:v.songid,
-        mid:v.songmid,
-        vid:v.vid,
-        singer:v.singer[0].name,
-        interval:v.interval,
-        url:`http://ws.stream.qqmusic.qq.com/C100${v.songmid}.m4a?fromtag=0&guid=0`,
-        pic:`http://imgcache.qq.com/music/photo/album_300/${v.albumid%100}/300_albumpic_${v.albumid}_0.jpg`,
+      IT120_QQMUSIC_URL(v.songmid||v.mid).then(res=>{
+        let url=("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
+        let dom = document.getElementById('music-play')
+        let arr={
+          name:v.songname||v.name,
+          id:v.songid||v.id,
+          mid:v.songmid||v.mid,
+          vid:v.vid,
+          singer:v.singer[0].name||v.singer,
+          interval:v.interval,
+          url:!!res.data.data.midurlinfo[0].purl?url:`http://ws.stream.qqmusic.qq.com/C100${v.songmid}.m4a?fromtag=0&guid=0`,
+          // url:`http://ws.stream.qqmusic.qq.com/C100${v.songmid}.m4a?fromtag=0&guid=0`,
+          pic:!!v.pic?v.pic:`http://imgcache.qq.com/music/photo/album_300/${v.albumid%100}/300_albumpic_${v.albumid}_0.jpg`,
       }
       dom.setAttribute('data-src',JSON.stringify(arr))
+      }).catch(error=>{
+        console.log(v)
+      })
+      
     },
     mvPlay(vid){
       let url=[]
@@ -197,7 +194,8 @@ export default {
             vid:ele.data.vid,
             singer:ele.data.singer[0].name,
             interval:ele.data.interval,
-            url:`http://ws.stream.qqmusic.qq.com/C100${ele.data.songmid}.m4a?fromtag=0&guid=0`,
+            // url:,
+            // url:`http://ws.stream.qqmusic.qq.com/C100${ele.data.songmid}.m4a?fromtag=0&guid=0`,
             pic:`http://imgcache.qq.com/music/photo/album_300/${ele.data.albumid%100}/300_albumpic_${ele.data.albumid}_0.jpg`,
           })
         });

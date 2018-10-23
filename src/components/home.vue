@@ -14,7 +14,7 @@
         <!-- 歌曲 -->
        <Footer />
        <div>
-           <audio id="music-play" data-src="" src=""></audio>
+           <audio id="music-play" data-src="" :src=null></audio>
        </div>
     </div>
 </template>
@@ -108,9 +108,16 @@ import {
                     break
                 }
             })
-             target.addEventListener("pause", ()=> {
-                 this.play.isplay=false
-             })
+            target.addEventListener("pause", ()=> {
+                this.play.isplay=false
+            })
+            target.addEventListener("error", ()=> {
+                this.play.isplay=false
+                console.log('error')
+                this.$Message.error({
+                    content:'获取歌曲地址失败'
+                })
+            })
 
         },
         methods:{
@@ -192,8 +199,19 @@ import {
                 this.dom.autoplay=true
                 this.dom.setAttribute('data-src',JSON.stringify(arr))
             },
-           
-        }
+            error(){
+                if(this.dom.src==''){
+                    return
+                }
+                this.$Message.error({
+                    content:"加载歌曲出错",
+                })
+                this.randomPlay()
+            }
+        },
+        destroyed() {
+            localStorage.removeItem('qqmusic-top-list')
+        },
        
     }
 </script>

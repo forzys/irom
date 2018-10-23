@@ -157,6 +157,7 @@ export default {
         res.code==0&&res.msg=='success'?
         this.$Notice.open({
           title: res.data.title,
+          duration: 5,
           render:h=>{
             return (
               <div>
@@ -165,7 +166,11 @@ export default {
                       innerHTML: res.data.content
                     },
                 })}
-                <p style="text-align:right">{res.data.dateAdd}</p>
+                <div style="margin-top:10px">
+                <a style="float:left">更多</a>
+                 <p style="text-align:right">{res.data.dateAdd}</p>
+                </div>
+               
               </div>
             )
           }
@@ -247,7 +252,6 @@ export default {
         this.play.op>3?this.play.op=1:this.play.op
         this.opPlay()
         break;
-
        default:
           console.log('default')
      }
