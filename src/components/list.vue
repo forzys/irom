@@ -37,12 +37,10 @@ export default {
   methods:{
     play(v){
       let dom = document.getElementById('music-play')
-      dom.src=v.url
-      dom.autoplay=true
       dom.setAttribute('data-src',JSON.stringify(v))
     },
     playMv(v){
-      console.log(v)
+      this.$emit('mvPlay')
     },
   }
 }

@@ -12,7 +12,7 @@
             <DropdownMenu slot="list" v-show="!!weather">
                 <DropdownItem disabled>
                   <p>{{weather.name}}</p>
-                  <div>空气:{{weatsher.air}}  pm2.5:{{weather.pm25}}</div>
+                  <div>空气:{{weather.air}}  pm2.5:{{weather.pm25}}</div>
                   <span>白天：</span>
                   <div>
                     {{weather.day_temperature}}℃  {{weather.day_weather}}  {{weather.day_wind}} 
@@ -68,7 +68,7 @@
             </Dropdown>
         </span>
         <!-- 音乐 -->
-        <span @click="playingMusicNotice">
+        <span @click="getPlayingMusic">
           <Icon type="ios-musical-notes-outline" size="22"/>
         </span>
         <!-- 通知 -->
@@ -96,6 +96,9 @@ import { getExpress,musicUrl} from '@/static/js/index.js'
 
 export default {
   name:'Header',
+  props:{
+    play:{ type:Object, required: true},
+  },
   data(){
     return{
       count:1,
@@ -106,14 +109,6 @@ export default {
         color:'#b4a078',
       },
       dropVisible:false,
-      play:{
-        op:1,
-        title:'🎵',
-        singer:'',
-        isplay:false,
-        status:false,
-        img:"http://p3.music.126.net/ngMYX6gS8r3r35df8BwwuQ==/109951163570136187.jpg?param=200y200",
-      },
       key:'',
     }
   },
@@ -129,38 +124,6 @@ export default {
     // })
     window.playing=(w)=>{
       this.playing(w)
-    }
-    // Firefox和Chrome早期版本中带有前缀
-    let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
-    // 选择目标节点
-    let target = document.getElementById('music-play'); 
-    // 创建观察者对象
-    var observer = new MutationObserver((mutations)=>{  
-        mutations.forEach((mutation)=>{ 
-          if(mutation.attributeName=='data-src'){
-            let data=this.dom.getAttribute('data-src')
-            this.play.title=JSON.parse(data).name
-            this.play.img=JSON.parse(data).pic
-            this.play.singer=JSON.parse(data).singer
-            this.play.status=true;
-            this.play.isplay=true;
-          }
-        }); 
-    }); 
-    // 配置观察选项:
-    var config = { attributes: true} 
-    // 传入目标节点和观察选项
-    observer.observe(target, config); 
-    // 随后,你还可以停止观察
-    // observer.disconnect();
-    target.addEventListener("ended", ()=> {
-      if(this.play.op!==2){
-         this.randomPlay()
-      }
-    })
-    
-    window.play = (w)=>{
-      this.play(w)
     }
 
   },
@@ -197,7 +160,11 @@ export default {
           render:h=>{
             return (
               <div>
-                <span>{res.data.content.slice(3,-4)}</span>
+                {h('span', {
+                   domProps: {
+                      innerHTML: res.data.content
+                    },
+                })}
                 <p style="text-align:right">{res.data.dateAdd}</p>
               </div>
             )
@@ -273,9 +240,7 @@ export default {
           console.log(w)
           break;
        case 'random':
-          this.randomPlay()
-          this.play.isplay=true
-          this.play.status=true
+          this.$emit('random')
           break;
        case 'op':
         this.play.op++
@@ -286,26 +251,6 @@ export default {
        default:
           console.log('default')
      }
-    },
-    randomPlay(){
-      let random = Math.ceil((Math.random())*30)
-      let round = Math.round(Math.random())
-      let list = JSON.parse(localStorage.getItem('qqmusic-top-list'))
-      let check=list[round].songlist[random].data
-      console.log(check)
-      let arr={
-        name:check.songname,
-        id:check.songid,
-        mid:check.songmid,
-        vid:check.vid,
-        singer:check.singer[0].name,
-        interval:check.interval,
-        url:`http://ws.stream.qqmusic.qq.com/C100${check.songmid}.m4a?fromtag=0&guid=0`,
-        pic:`http://imgcache.qq.com/music/photo/album_300/${check.albumid%100}/300_albumpic_${check.albumid}_0.jpg`,
-      }
-      this.dom.src=arr.url
-      this.dom.autoplay=true
-      this.dom.setAttribute('data-src',JSON.stringify(arr))
     },
     opPlay(){
       this.dom.setAttribute('loop',false)

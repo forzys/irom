@@ -14,8 +14,8 @@
         </a>
         <CellGroup>
             <Cell v-for="(v,i) in item.songlist.slice(0, 5)" :key="i">
-                <Icon type="ios-play-outline" @click="play(v.data.songmid,v.data.songid,v.data.songtype)"/>
-                <Icon type="ios-film-outline" v-if="!!v.data.vid" @click="playMv(v.data.vid)"/>
+                <Icon type="ios-play-outline" @click="play(v.data)"/>
+                <Icon type="ios-film-outline" v-if="!!v.data.vid" @click="mvPlay(v.data.vid)"/>
 
                <span>{{v.data.songname}}</span>
                <span>{{v.data.singer[0].name||'未知'}}</span>
@@ -39,8 +39,44 @@
     <!-- 榜单end -->
     <!-- 列表 -->
      <transition name="fade">
-       <MusicList v-if="isListShow" :data="list" :title="title" @back="mback"/>
+       <MusicList v-if="isListShow" :data="list" :title="title" @back="mback" @mvPlay="mvPlay" />
     </transition>
+     <transition name="fade">
+      <Modal
+        :title="video.title"
+        v-model="video.isShow"
+        :fullscreen="video.full"
+        :draggable=true
+        >
+        <!-- 关闭按钮 -->
+          <!-- <div slot="header" style="text-align:right">
+            <Icon type="ios-expand" @click="video.full=!video.full"/>
+            <Icon type="ios-close" @click="video.isShow=false" />
+          </div> -->
+          <!-- 播放主体 -->
+          <div class="video-modal" style="width:100%">
+            <video v-if="video.isShow" :src="video.arr[video.i]" width="100%" height="200" :onerror="videoErr" controls>
+              浏览器不支持 Video 播放器
+            </video>
+          </div>
+          <!-- footer -->
+          <div slot="footer">
+            <Dropdown
+              placement="bottom-start"
+              @on-click="(i)=>{video.i=i}">
+              <a href="javascript:void(0)">
+                  {{video.i==0?'标清-':'高清-'}}清晰度<Icon type="ios-arrow-down"></Icon>
+              </a>
+              <DropdownMenu slot="list" style="text-align:left">
+                  <DropdownItem name=0 >标清</DropdownItem>
+                  <DropdownItem :name="video.arr.length-1">高清</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+      </Modal>
+    </transition>
+
+
   </div>
 </template>
 
@@ -64,10 +100,17 @@ export default {
       data:'',
       title:'',
       songList:[],
+      video:{
+        arr:[],
+        title:'播放',
+        i:0,
+        full:false,
+        isShow:false
+      },
       list:[],
-      audio:null,
       isTopShow:true,
       isListShow:false,
+     
     }
    
   },
@@ -81,89 +124,67 @@ export default {
       let list=localStorage.getItem('qqmusic-top-list')
       //判断本地存储数据是否存在
       if(!!list){
-        this.songList=JSON.parse(list)
-        return
-      }
-      //获取新歌榜
-      IT120_QQMUSIC_NEW().then(res=>{
-       let newSongList={
-         title:res.data.topinfo.ListName,
-         info:res.data.topinfo.info,
-         pic:res.data.topinfo.pic_h5,
-         songlist:res.data.songlist,
-       }
-       !!JSON.stringify(newSongList)?
-       this.songList.push(newSongList):
-       this.songList.push({error:'获取新歌榜数据失败'});
-       newSongList=null
-      }).catch(error=>{
-        this.songList=[]
-         this.songList.push({error:'获取新歌榜数据失败'})
-      })
-      //获取热歌榜
-      IT120_QQMUSIC_HOT().then(res=>{
-        let hotSongList={
-          title:res.data.topinfo.ListName,
-          info:res.data.topinfo.info,
-          pic:res.data.topinfo.pic_h5,
-          songlist:res.data.songlist,
-        }
-        !!JSON.stringify(hotSongList)?
-        this.songList.push(hotSongList):
-        this.songList.push({error:'获取热歌榜数据失败'});
-        hotSongList=null
-      }).catch(error=>{
-        this.songList=[]
-        this.songList.push({error:'获取热歌榜数据失败'})
-      })
-      //5秒后缓存榜单到本地(出错跳过)
-      try{
-        setTimeout(()=>{
-          if(!!this.songList[0].error){return}
-          let data=JSON.stringify(this.songList)
-          !!data?localStorage.setItem('qqmusic-top-list',data):''
-          data=null
-        },5000)
-      }catch(e){
-        this.$Message.error({
-          content:'天啊噜，发生了很严重的问题！！数据保不住了,将清除站点的localStorage。',
-          duration:5,
-        })
-        localStorage.clear()
+          this.songList=JSON.parse(list)
+          return
+      }else{
+         this.$Message.error({
+            content:'获取信息出错',
+            duration:5,
+          })
       }
     },
     mback(){
       this.isListShow=false;
       this.isTopShow=true;
     },
-
-    play(songmid,songid,type){
+    play(v){
       //构造Url（可绕过版权和登陆限制）
-      let url=`http://ws.stream.qqmusic.qq.com/C100${songmid}.m4a?fromtag=0&guid=0`
-      
+      // let url=`http://ws.stream.qqmusic.qq.com/C100${v.data.songmid}.m4a?fromtag=0&guid=0`
       // IT120_QQMUSIC_URL(songmid).then(res=>{
-
       //   // res.data.data.sip.forEach(item => {
       //   //   url.push("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
       //   // });
-        this.audio.src=url
-        this.audio.load();
-        this.audio.play();
+        // this.audio.src=url
+        // this.audio.load();
+        // this.audio.play();
       // }).catch(error=>{
-      //   console.log(error)
+        // console.log(v)
       // })
+      let dom = document.getElementById('music-play')
+      let arr={
+        name:v.songname,
+        id:v.songid,
+        mid:v.songmid,
+        vid:v.vid,
+        singer:v.singer[0].name,
+        interval:v.interval,
+        url:`http://ws.stream.qqmusic.qq.com/C100${v.songmid}.m4a?fromtag=0&guid=0`,
+        pic:`http://imgcache.qq.com/music/photo/album_300/${v.albumid%100}/300_albumpic_${v.albumid}_0.jpg`,
+      }
+      dom.setAttribute('data-src',JSON.stringify(arr))
     },
-
-
-
-    playMv(vid){
+    mvPlay(vid){
+      let url=[]
+      document.getElementById('music-play').pause();
       IT120_QQMV_SHOUBO(vid).then(res=>{
-        console.log(res)
-
+        if(!res.getMvUrl&&!res.getMvUrl.data){return}
+        for(let i in res.getMvUrl.data){
+          res.getMvUrl.data[i].mp4.forEach(item=>{
+            item.freeflow_url.length>0?url=url.concat(item.freeflow_url):''
+          })
+        }
+        this.video.arr=[...new Set(url)]
+        this.video.isShow=true
       }).catch(error=>{
         console.log(error)
       })
+      console.log(this.video.arr)
     },
+    videoErr(){
+      console.log('可能是播放地址失效')
+      this.video.i>this.video.arr.length-1?this.video.i=0:this.video.i++
+    },
+   
     isShow(id){
       //清洗数据
       if(!!String(id)){
@@ -186,7 +207,8 @@ export default {
         this.isListShow=!this.isListShow
       }
       this.isTopShow=!this.isTopShow
-    }
+    },
+    
   }
 }
 </script>
