@@ -7,7 +7,7 @@
         <p slot="title" class="title">
             <Icon type="ios-musical-notes" />
             {{item.title}}
-            <Badge :count="30" slot="extra" />
+            <Badge :count="item.songlist.length" slot="extra" />
         </p>
         <a href="#" @click.prevent="init" class="content">
             <img :src="item.pic" alt="" @click="isShow(index)">
@@ -55,7 +55,7 @@
           </div> -->
           <!-- 播放主体 -->
           <div class="video-modal" style="width:100%">
-            <video v-if="video.isShow" autoplay :src="video.arr[video.i]" width="100%" height="200" :onerror="videoErr" controls>
+            <video v-if="video.isShow" autoplay :src="video.arr[video.i]" width="100%" height="200" :onerror="videoErr" controls poster>
               浏览器不支持 Video 播放器
             </video>
           </div>
@@ -141,6 +141,7 @@ export default {
       //构造Url（可绕过版权和登陆限制）
       // let url=`http://ws.stream.qqmusic.qq.com/C100${v.data.songmid}.m4a?fromtag=0&guid=0`
       IT120_QQMUSIC_URL(v.songmid||v.mid).then(res=>{
+        console.log(res)
         let url=("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
         let dom = document.getElementById('music-play')
         let arr={

@@ -239,13 +239,13 @@ export default {
             this.dom.play()
           break;
        case 'next':
-          this.playing('random')
+          this.$emit('random',1)
           break;
        case 'last':
-          console.log(w)
+          this.$emit('random',-1)
           break;
        case 'random':
-          this.$emit('random')
+          this.$emit('random',0)
           break;
        case 'op':
         this.play.op++

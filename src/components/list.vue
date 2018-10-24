@@ -12,7 +12,7 @@
               <small slot="extra">
                 {{
                   Math.floor(v.interval/60)+':'+
-                  (v.interval%60>10?v.interval%60:'0'+v.interval%60)
+                  ((v.interval%60)>=10?(v.interval%60):('0'+(v.interval%60)))
                 }}
             </small>
         </Cell>

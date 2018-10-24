@@ -48,6 +48,8 @@ import {
                     title:'🎵',
                     singer:'',
                     src:'',
+                    his:[],
+                    hi:0,
                     isplay:false,
                     status:false,
                     img:"http://p3.music.126.net/ngMYX6gS8r3r35df8BwwuQ==/109951163570136187.jpg?param=200y200",
@@ -113,7 +115,6 @@ import {
             })
             target.addEventListener("error", ()=> {
                 this.play.isplay=false
-                console.log('error')
                 this.$Message.error({
                     content:'获取歌曲地址失败'
                 })
@@ -122,14 +123,14 @@ import {
         },
         methods:{
             init(){
-                let list=localStorage.getItem('qqmusic-top-list')
-                //判断本地存储数据是否存在
-                if(!!list){
-                    this.songList=JSON.parse(list)
-                    return
-                }
+                // let list=localStorage.getItem('qqmusic-top-list')
+                // //判断本地存储数据是否存在
+                // if(!!list){
+                //     this.songList=JSON.parse(list)
+                //     return
+                // }
                 //获取新歌榜
-                IT120_QQMUSIC_NEW().then(res=>{
+                IT120_QQMUSIC_NEW(0,100).then(res=>{
                 let newSongList={
                     title:res.data.topinfo.ListName,
                     info:res.data.topinfo.info,
@@ -145,7 +146,7 @@ import {
                     this.songList.push({error:'获取新歌榜数据失败'})
                 })
                 //获取热歌榜
-                IT120_QQMUSIC_HOT().then(res=>{
+                IT120_QQMUSIC_HOT(0,100).then(res=>{
                     let hotSongList={
                     title:res.data.topinfo.ListName,
                     info:res.data.topinfo.info,
@@ -160,54 +161,85 @@ import {
                     this.songList=[]
                     this.songList.push({error:'获取热歌榜数据失败'})
                 })
-                //5秒后缓存榜单到本地(出错跳过)
+                //3秒后缓存榜单到本地(出错跳过)
                 try{
                     setTimeout(()=>{
-                    if(!!this.songList[0].error){return}
-                    let data=JSON.stringify(this.songList)
-                    !!data?localStorage.setItem('qqmusic-top-list',data):''
-                    data=null
-                    },5000)
+                        if(!!this.songList[0].error){return}
+                        let data=JSON.stringify(this.songList)
+                        !!data?localStorage.setItem('qqmusic-top-list',data):''
+                        data=null
+                    },3000)
                 }catch(e){
                     this.$Message.error({
-                    content:'天啊噜，发生了很严重的问题！！数据保不住了,将清除站点的localStorage。',
-                    duration:5,
+                        content:'天啊噜，发生了很严重的问题！！将清除站点的localStorage。',
+                        duration:5,
                     })
                     localStorage.clear()
                 }
             },
-            randomPlay(){
-                let random = Math.ceil((Math.random())*30)
-                let round = Math.round(Math.random())
+            randomPlay(flag=0){
+                /***
+                 * flag 0随机 1下一曲 -1上一曲
+                 *  */
+               
                 let list = JSON.parse(localStorage.getItem('qqmusic-top-list'))
+               
                 if(!list){
-                    this.$router.push('/qqMusic')
+                   this.$Message.error({
+                        content:'获取数据失败，请刷新重试',
+                        duration:5,
+                    })
                     return
                 }
+                 let random,round
+                if(flag==0||!flag){
+                    random = Math.ceil((Math.random())*99)//30以内29的时候是最后一个第30个
+                    round = Math.round(Math.random())
+                    this.play.his.push([round,random])
+                    this.play.hi = this.play.his.length-1
+                }else{
+                    this.play.hi=this.play.hi+flag
+
+                    this.play.hi<-1?this.play.hi=-1:''
+
+                    if(this.play.hi<0){
+                        this.$Message.error({
+                            content:'没有歌曲',
+                            duration:5,
+                        })
+                        return
+                    }else if(this.play.hi>this.play.his.length-1){
+                        this.$Message.success({
+                            content:'将随机播放',
+                            duration:5,
+                        })
+                        this.randomPlay(0)
+                        return
+                    }else{
+                        round=this.play.his[this.play.hi][0]
+                        random=this.play.his[this.play.hi][1]
+                    }
+                }
+                
                 let check=list[round].songlist[random].data
-                let arr={
-                    name:check.songname,
-                    id:check.songid,
-                    mid:check.songmid,
-                    vid:check.vid,
-                    singer:check.singer[0].name,
-                    interval:check.interval,
-                    url:`http://ws.stream.qqmusic.qq.com/C100${check.songmid}.m4a?fromtag=0&guid=0`,
-                    pic:`http://imgcache.qq.com/music/photo/album_300/${check.albumid%100}/300_albumpic_${check.albumid}_0.jpg`,
-                }
-                this.dom.src=arr.url
-                this.dom.autoplay=true
-                this.dom.setAttribute('data-src',JSON.stringify(arr))
+                
+                IT120_QQMUSIC_URL(check.songmid).then(res=>{
+                    let url=("http://140.207.247.14/amobile.music.tc.qq.com/"+res.data.data.midurlinfo[0].purl)
+                    let arr={
+                        name:check.songname,
+                        id:check.songid,
+                        mid:check.songmid,
+                        vid:check.vid,
+                        singer:check.singer[0].name,
+                        interval:check.interval,
+                        url:!!res.data.data.midurlinfo[0].purl?url:`http://ws.stream.qqmusic.qq.com/C100${check.songmid}.m4a?fromtag=0&guid=0`,
+                        pic:`http://imgcache.qq.com/music/photo/album_300/${check.albumid%100}/300_albumpic_${check.albumid}_0.jpg`,
+                    }
+                    // this.dom.src=arr.url
+                    // this.dom.autoplay=true
+                    this.dom.setAttribute('data-src',JSON.stringify(arr))
+                }).catch()
             },
-            error(){
-                if(this.dom.src==''){
-                    return
-                }
-                this.$Message.error({
-                    content:"加载歌曲出错",
-                })
-                this.randomPlay()
-            }
         },
         destroyed() {
             localStorage.removeItem('qqmusic-top-list')
