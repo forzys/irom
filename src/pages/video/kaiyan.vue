@@ -1,17 +1,37 @@
 <template>
   <div class="kaiyan">
-    <div v-for="(item,i) in data" :key="i" >
-      <div v-if="item.type=='video'" :class="'eye-'+i" @click="video.arr=[item.data.playUrl],video.title=item.title,video.isShow=true">
-        <div  class="cover" :style="{backgroundImage:item.data&&item.data.cover?`url(${item.data.cover.detail})`:'#ccc'}">
-          <div class="title">
-            <a>{{item.data.title}}</a>
-            <p>#{{item.data.category}}</p>
-            <br />
-            <p class="des">{{item.data.description}}</p>
+    <Scroll :on-reach-bottom="init" :height="height">
+      <div v-for="(item,i) in data" :key="i" >
+        <div v-if="item.type=='video'" :class="'eye-'+i" @click="playVideo(item)">
+          <div  class="cover" :style="{backgroundImage:item.data&&item.data.cover?`url(${item.data.cover.detail})`:'#ccc'}">
+            <div class="title">
+              <p style="font-size:16px">{{item.data.title}}</p>
+              <p>#{{item.data.category}}</p>
+              <br />
+              <p class="des">{{item.data.description}}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <div v-if="nextUrl=='over'" style="text-align:center;font-size:16px;">
+        <a @click="nextModel=true" v-show="!nextModel">已经快没有了哦,点我继续加载</a>
+        <div v-if="nextModel" v-for="(item,i) in data" :key="i">
+          <div v-if="item.type=='videoCollectionWithCover'||item.type=='videoCollectionOfFollow'" >
+              <div v-for="(res,j) in item.data.itemList" :key="j" :class="'eye-'+i+j" @click="playVideo(res)">
+                 <div  class="cover" :style="{backgroundImage:res.data&&res.data.cover?`url(${res.data.cover.detail})`:'#ccc'}">
+                  <div class="title">
+                    <p style="font-size:16px">{{res.data.title}}</p>
+                    <p>#{{res.data.category}}</p>
+                    <br />
+                    <p class="des">{{res.data.description}}</p>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      
+    </Scroll>
      <Modal
         :title="video.title"
         v-model="video.isShow"
@@ -49,7 +69,9 @@ export default {
   data(){
     return{
       data:[],
-      nextUrl:'',
+      nextUrl:' ',
+      nextModel:false,
+      height:'',
       video:{
         title:'',
         arr:[],
@@ -60,16 +82,28 @@ export default {
   },
   mounted(){
     this.init();
+    this.height=window.screen.availHeight
   },
   methods:{
     init(){
+      if(this.nextUrl=='over'){
+        return
+      }
       IT120_KAIYAN_INDEX(this.nextUrl).then(res=>{
-        this.nextUrl=res.data.nextPageUrl.split('?')[1]
-        console.log(this.nextUrl)
-        this.data=res.data.itemList
-        console.log(res)
+        // console.log(res)
+        this.nextUrl=!!res.data.nextPageUrl?res.data.nextPageUrl.split('?')[1]:'over'
+        res.data.itemList.forEach(ele => {
+          this.data.push(ele)
+        });
 
       }).catch()
+    },
+    playVideo(res){
+      document.getElementById('music-play').pause();
+      this.video.arr=[res.data.playUrl]
+      this.video.title=res.data.title
+      this.video.isShow=true
+       
     },
     videoErr(v){
       console.log(v)
@@ -81,10 +115,10 @@ export default {
 </script>
 
 <style scoped>
-a{
+/* a{
   color:#fff;
   text-decoration: underline;
-}
+} */
 p{
   color:#fff;
 }
