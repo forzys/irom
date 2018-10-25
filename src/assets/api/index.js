@@ -181,3 +181,10 @@ export function IT120_QQMV_SHOUBO(vids="l0027z1nbe8"){
   })
 }
 ///////////////////////////////////////////////////////end//////////////////////////
+// kaiyan  https://api.it120.cc/mforz/api/transmit/724
+export function IT120_KAIYAN_INDEX(url){
+  return Axios({
+    methods:'get',
+    url:`it120/api/transmit/724?${url}`
+  })
+}

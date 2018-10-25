@@ -48,22 +48,11 @@
         :fullscreen="video.full"
         :draggable=true
         >
-        <!-- 关闭按钮 -->
-          <!-- <div slot="header" style="text-align:right">
-            <Icon type="ios-expand" @click="video.full=!video.full"/>
-            <Icon type="ios-close" @click="video.isShow=false" />
-          </div> -->
           <!-- 播放主体 -->
-          <div class="video-modal" style="width:100%">
-            <video v-if="video.isShow" autoplay :src="video.arr[video.i]" width="100%" height="200" :onerror="videoErr" controls poster>
-              浏览器不支持 Video 播放器
-            </video>
-          </div>
+          <VideoModel v-if="video.isShow" :data="video" @videoerr="videoErr" />
           <!-- footer -->
           <div slot="footer">
-            <Dropdown
-              placement="bottom-start"
-              @on-click="(i)=>{video.i=i}">
+            <Dropdown placement="bottom-start" @on-click="(i)=>{video.i=i}">
               <a href="javascript:void(0)">
                   {{video.i==0?'标清-':'高清-'}}清晰度<Icon type="ios-arrow-down"></Icon>
               </a>
@@ -75,8 +64,6 @@
           </div>
       </Modal>
     </transition>
-
-
   </div>
 </template>
 
@@ -90,10 +77,12 @@ import {
   IT120_QQMV_SHOUBO
 } from '@/assets/api/index.js'
 import MusicList from '@/components/list.vue'
+import VideoModel from '@/components/video.vue'
 export default {
   name:'qqMusic',
   components:{
-    MusicList
+    MusicList,
+    VideoModel
   },
   data(){
     return{
@@ -163,6 +152,7 @@ export default {
     },
     mvPlay(vid){
       let url=[]
+      this.video.arr=[]
       document.getElementById('music-play').pause();
       IT120_QQMV_SHOUBO(vid).then(res=>{
         if(!res.getMvUrl&&!res.getMvUrl.data){return}

@@ -4,7 +4,8 @@ import Home from '@/components/Home'
 import Detail from '@/pages/books/zhihu/detail.vue'
 import TimeLine from '@/pages/timeLine/'
 import Zhihu from '@/pages/books/zhihu/'
-import QQmusic from '@/pages/music/qqMusic/'
+import QQmusic from '@/pages/music/qqMusic.vue'
+import Kaiyan from '@/pages/video/kaiyan.vue'
 
 Vue.use(Router)
 
@@ -39,7 +40,12 @@ export default new Router({
           component: TimeLine,
           meta: {keepAlive: false}// 不需要缓存
         },
-
+        {
+          path:'/kaiyan',
+          name:'KaiYan',
+          component: Kaiyan,
+          meta: {keepAlive: false}// 不需要缓存
+        },
       ]
     }
 

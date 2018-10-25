@@ -5,6 +5,20 @@
         <img :src="style.logoimg" alt="logo" onerror="this.style.display='none'">
       </div>
       <div class="right" :style="{color:style.color}">
+        <!-- 功能 -->
+        <span>
+           <Icon type="ios-apps-outline" @click="drop.funcVisible=!drop.funcVisible" />
+            <Dropdown trigger="custom" 
+                :visible="drop.funcVisible"
+                transfer
+                @on-clickoutside="drop.funcVisible=false"
+                @on-click="(name)=>$router.push(name)">
+              <DropdownMenu slot="list">
+                  <DropdownItem name="/qqmusic">音乐</DropdownItem>
+                  <DropdownItem name="/kaiyan">开眼</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+        </span>
         <!-- 天气 -->
         <span>
           <Dropdown trigger="click" style="text-align:left">
@@ -27,11 +41,11 @@
         </span>
         <!-- 设置 -->
         <span>
-           <Icon type="ios-settings-outline" size="22" @click="dropVisible=!dropVisible" />
+           <Icon type="ios-settings-outline" size="22" @click="drop.settingVisible=!drop.settingVisible" />
            <Dropdown trigger="custom" 
-                :visible="dropVisible" 
+                :visible="drop.settingVisible" 
                 placement="bottom-end" 
-                @on-clickoutside="dropVisible=false">
+                @on-clickoutside="drop.settingVisible=false">
               <DropdownMenu slot="list">
                   <DropdownItem>
                    <div>
@@ -108,7 +122,11 @@ export default {
         bgcolor:'#fff',
         color:'#b4a078',
       },
-      dropVisible:false,
+      drop:{
+        settingVisible:false,
+        funcVisible:false,
+      },
+      
       key:'',
     }
   },
