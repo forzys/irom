@@ -329,9 +329,10 @@ i{
 .right{
   text-align: right;
   margin:0 30px;
+  /* display:flex; */
 }
 .right>span{
-  margin:0 10px;
+  margin:0 1.5%;
 }
 .right i{
   cursor: pointer;
