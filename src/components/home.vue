@@ -211,7 +211,7 @@ import {
                     }else if(this.play.hi>this.play.his.length-1){
                         this.$Message.success({
                             content:'将随机播放',
-                            duration:5,
+                            duration:3,
                         })
                         this.randomPlay(0)
                         return

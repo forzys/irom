@@ -25,11 +25,11 @@ module.exports = {
             '^/zhihu':'/'
         }
       },
-      '/qq':{
+      '/qqmusic':{
         target: 'https://u.y.qq.com/',
         changeOrigin: true,
         pathRewrite:{
-            '^/qq':'/'
+            '^/qqmusic':'/'
         }
       }, 
       //https: //interface.sina.cn/dfz/outside/ipdx/weather.d.html?length=1&air=1&callback=
@@ -40,8 +40,6 @@ module.exports = {
               '^/weather': '/'
             }
       }
-      
-
     },
 
     // Various Dev Server settings

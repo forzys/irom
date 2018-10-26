@@ -1,7 +1,6 @@
 import Axios from './config.js'
 import { musicImg } from '../../static/js/index.js';
 
-
 /**
  * 知乎专栏
  * 
@@ -48,25 +47,24 @@ export function ZHIHUEXTRA(id){
  * it120
  * 
 */
-//sina天气
-export function IT120_WEATHER(){
-  return Axios({
-    methods:'get',
-    // url:`/it120/api/transmit/698`
-    url: `/weather/ipdx/weather.d.html?length=1&air=1&callback=`
-  }) 
-}
 //sina HotWord
 export function IT120_HOTWORD(){
   return Axios({
     methods:'get',
-    url:`/it120/api/transmit/697`
+    url:`${process.env.API_IT120}/api/transmit/697`
+  }) 
+}
+//sina天气
+export function IT120_WEATHER(){
+  return Axios({
+    methods:'get',
+    url: `${process.env.API_WEATHER}/ipdx/weather.d.html?length=1&air=1&callback=`
   }) 
 }
 export function IT120_GETNOTICE(n=0){
   return Axios({
     methods: 'get', 
-    url: `/it120/notice/${!n?'last-one':'list'}`
+    url: `${process.env.API_IT120}/notice/${!n?'last-one':'list'}`
   }) 
 }
 
@@ -74,7 +72,7 @@ export function IT120_GETNOTICE(n=0){
 export function IT120_KUAIDI(fac='shunfeng',id){
   return Axios({
     methods:'get',
-    url:`/it120/api/transmit/699?type=${fac}&postid=${id}`
+    url:`${process.env.API_IT120}/api/transmit/699?type=${fac}&postid=${id}`
   }) 
 }
 //较慢；响应时间4s左右
@@ -82,7 +80,7 @@ export function IT120_KUAIDI(fac='shunfeng',id){
 export function IT120_ROBOT(query){
   return Axios({
     methods:'get',
-    url:`/it120/api/transmit/700?key=free&appid=0&msg=${query}`
+    url:`${process.env.API_IT120}/api/transmit/700?key=free&appid=0&msg=${query}`
   }) 
 }
 //较快；响应时间0.9s左右
@@ -90,7 +88,7 @@ export function IT120_ROBOT(query){
 export function IT120_ROBOT2(query){
   return Axios({
     methods:'get',
-    url:`/it120/api/transmit/706?search=${query}`
+    url:`${process.env.API_IT120}/api/transmit/706?search=${query}`
   }) 
 }
 ///////////////////qq专区////////////////////////////////////
@@ -99,21 +97,21 @@ export function IT120_QQMUSIC_SEARCH(num=10,name){
   console.log(num,name)
   return Axios({
     methods:'get',
-    url:`/it120/api/transmit/701?n=${num}&w=${name}&format=json`
+    url:`${process.env.API_IT120}/api/transmit/701?n=${num}&w=${name}&format=json`
   })
 }
 //qq 新歌
 export function IT120_QQMUSIC_NEW(begin=0,num=30){
   return Axios({
     methods:'get',
-    url:`it120/api/transmit/702?topid=27&song_begin=${begin}&song_num=${num}`
+    url:`${process.env.API_IT120}/api/transmit/702?topid=27&song_begin=${begin}&song_num=${num}`
   })
 }
 //qq 热歌
 export function IT120_QQMUSIC_HOT(begin=0,num=30){
   return Axios({
     methods:'get',
-    url:`it120/api/transmit/702?topid=26&song_begin=${begin}&song_num=${num}`
+    url:`${process.env.API_IT120}/api/transmit/702?topid=26&song_begin=${begin}&song_num=${num}`
   })
 }
 //qq 歌词
@@ -121,7 +119,7 @@ export function IT120_QQMUSIC_LRC(id,type){
   let g_SongData={
     type:type
   }
-  var url = "it120/api/transmit/707?nobase64=1&musicid=" + id + "&callback=jsonp1" + ((g_SongData.songtype == 111 || g_SongData.songtype == 112 || g_SongData.songtype == 113) ? ('&songtype=' + g_SongData.songtype) : '');
+  var url = `${process.env.API_IT120}/api/transmit/707?nobase64=1&musicid=` + id + "&callback=jsonp1" + ((g_SongData.songtype == 111 || g_SongData.songtype == 112 || g_SongData.songtype == 113) ? ('&songtype=' + g_SongData.songtype) : '');
   console.log(url)
   let xml=`http://music.qq.com/miniportal/static/lyric/${id%100}/${id}.xml`
   // let url=`http://query.yahooapis.com/v1/public/yql?q=select*from%20x÷ml%20where%20url=${xml}&format=json&diagnostics=true&callback=?`
@@ -159,7 +157,7 @@ export function IT120_QQMUSIC_URL(songmid="000yB0Dc1mwtra",guid="2763071988"){
     }
   return Axios({
     methods:'get',
-    url:`qq/cgi-bin/musicu.fcg?data=${JSON.stringify(data)}`
+    url:`${process.env.API_QQMUSIC}/cgi-bin/musicu.fcg?data=${JSON.stringify(data)}`
   })
 }
 // qq 获取mv URL
@@ -177,7 +175,7 @@ export function IT120_QQMV_SHOUBO(vids="l0027z1nbe8"){
   }
   return Axios({
     methods:'get',
-    url:`qq/cgi-bin/musicu.fcg?data=${JSON.stringify(data)}`
+    url:`${process.env.API_QQMUSIC}/cgi-bin/musicu.fcg?data=${JSON.stringify(data)}`
   })
 }
 ///////////////////////////////////////////////////////end//////////////////////////
@@ -185,6 +183,6 @@ export function IT120_QQMV_SHOUBO(vids="l0027z1nbe8"){
 export function IT120_KAIYAN_INDEX(url){
   return Axios({
     methods:'get',
-    url:`it120/api/transmit/724?${url}`
+    url:`${process.env.API_IT120}/api/transmit/724?${url}`
   })
 }
