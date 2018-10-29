@@ -72,8 +72,8 @@ const components = {
   // Tree,
   Upload,
   // Drawer,
-  // CellGroup,
-  // Cell
+  CellGroup,
+  Cell
 }
 
 import {
@@ -147,8 +147,8 @@ import {
   // Tree,
   Upload,
   // Drawer,
-  // CellGroup,
-  // Cell
+  CellGroup,
+  Cell
 } from 'iView'
 
 const iviewModule = {

@@ -39,5 +39,5 @@ app.use('/weather', proxy({
 
 
 app.use(express.static("dist"));
-app.listen(8080);
+app.listen(3000);
 console.log('Proxy server is listen at port 3000...');
