@@ -1,6 +1,5 @@
 
-
-
+const host ='http://mori.leanapp.cn:3000'
 const Axios=( params={} ) => {
   let _params = Object.assign({
     methods: 'get',
@@ -10,7 +9,7 @@ const Axios=( params={} ) => {
 
   return axios({
     methods: _params.methods,
-    baseURL: 'http://localhost:3000/',
+    baseURL: host,
     url: _params.url,
     data: _params.data,
   }).then(res => {
