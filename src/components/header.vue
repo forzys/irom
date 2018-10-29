@@ -343,7 +343,15 @@ i{
   position: relative;
   top:0;
 }
+@keyframes rotation{
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(360deg);}
+}
 @-webkit-keyframes rotation{
+from {-webkit-transform: rotate(0deg);}
+to {-webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes  rotation{
 from {-webkit-transform: rotate(0deg);}
 to {-webkit-transform: rotate(360deg);}
 }
