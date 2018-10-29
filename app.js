@@ -3,7 +3,8 @@ var proxy = require('http-proxy-middleware');
 var app = express();
 
 const proxyRes=function(proxyRes, req, res){
-  res.header('Access-Control-Allow-Origin', req.headers["origin"] || "*");
+  // req.headers["origin"] ||
+  res.header('Access-Control-Allow-Origin', "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
   res.header("Content-Type", "application/json;charset=utf-8");
