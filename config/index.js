@@ -6,27 +6,26 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/it120': {
-        target: 'https://api.it120.cc/mforz/',
+        target: 'https://api.it120.cc/mforz',
         changeOrigin: true,
         pathRewrite:{
             '^/it120':'/'
         }
       },
       '/zhihu': {
-        target: 'https://news-at.zhihu.com/api/',
+        target: 'https://news-at.zhihu.com/api',
         changeOrigin: true,
         pathRewrite:{
             '^/zhihu':'/'
         }
       },
       '/qqmusic':{
-        target: 'https://u.y.qq.com/',
+        target: 'https://u.y.qq.com',
         changeOrigin: true,
         pathRewrite:{
             '^/qqmusic':'/'
@@ -34,7 +33,7 @@ module.exports = {
       }, 
       //https: //interface.sina.cn/dfz/outside/ipdx/weather.d.html?length=1&air=1&callback=
       '/weather':{
-          target: 'https://interface.sina.cn/dfz/outside/',
+          target: 'https://interface.sina.cn/dfz/outside',
             changeOrigin: true,
             pathRewrite: {
               '^/weather': '/'
@@ -56,7 +55,8 @@ module.exports = {
      */
 
     // https://webpack.js.org/configuration/devtool/#development
-    devtool: 'cheap-module-eval-source-map',
+    devtool: false,
+    // 'cheap-module-eval-source-map',
 
     // If you have problems debugging vue-files in devtools,
     // set this to false - it *may* help
@@ -73,7 +73,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps
@@ -81,7 +81,8 @@ module.exports = {
 
     productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
-    devtool: '#source-map',
+    devtool: false,
+    // '#source-map',
 
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
