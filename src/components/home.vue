@@ -30,7 +30,7 @@ import {
   IT120_QQMUSIC_LRC,
   IT120_QQMV_SHOUBO
 } from '@/assets/api/index.js'
-// import {audioPlayer} from '@/static/js/player.js'
+import {init} from '@/static/js/index.js'
 
     export default{
         name:'Home',
@@ -66,6 +66,7 @@ import {
             // this.$router.push('/zhihu')
             // console.log(getColor(19));
             // this.style=`background:${getColor(19).color};`
+            init();
             this.init()
             // Firefox和Chrome早期版本中带有前缀
             let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver

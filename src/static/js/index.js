@@ -63,7 +63,18 @@ export const musicPlay =()=>{
   
 }
 
+export const init =()=>{
+  //标题栏动态可爱标题
+  (function(){
+    var timer,ititle = document.title;
+    document.addEventListener("visibilitychange",function(){
+      document.hidden?
+      (document.title="(*>﹏<*) 我要回去!",clearTimeout(timer)):
+      (document.title="O(∩_∩)O 好开心!",timer = setTimeout(function(){document.title=ititle},3e3))})
+  })()
 
+
+}
 
 
 
