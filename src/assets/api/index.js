@@ -54,6 +54,19 @@ export function IT120_HOTWORD(){
     url:`/it120/api/transmit/697`
   }) 
 }
+export function IT120_INITINFO(){
+  return Axios({
+    methods:'get',
+    url:`/it120/json/list`
+  }) 
+}
+export function IT120_SETINFO(parmas){
+  return Axios({
+    methods:'post',
+    url:`/it120/json/set?id=1&content=${parmas}`
+  }) 
+}
+
 //sina天气
 export function IT120_WEATHER(){
   return Axios({
@@ -91,7 +104,7 @@ export function IT120_ROBOT2(query){
     url:`/it120/api/transmit/706?search=${query}`
   }) 
 }
-///////////////////qq专区////////////////////////////////////
+///////////////////qq音乐专区////////////////////////////////////
 //qq音乐搜索
 export function IT120_QQMUSIC_SEARCH(num=10,name){
   console.log(num,name)
@@ -186,3 +199,4 @@ export function IT120_KAIYAN_INDEX(url){
     url:`/it120/api/transmit/724?${url}`
   })
 }
+//360 壁纸

@@ -2,7 +2,7 @@
 <div class="header" :style="{backgroundColor:style.bgcolor}">
   <nav class="header-nav">
       <div class="left" @click="$router.push('/')">
-        <img :src="style.logoimg" alt="logo" onerror="this.style.display='none'">
+        <img :src="initData.logo" alt="logo" onerror="this.style.display='none'">
       </div>
       <div class="right" :style="{color:style.color}">
         <!-- 功能 -->
@@ -61,8 +61,8 @@
                    <div style="text-align:left">
                     <span>设置logo:</span>
                      <Poptip trigger="focus">
-                        <Input v-model="style.logoimg" style="max-width:60px;"></Input>
-                        <div slot="content">{{ style.logoimg }}</div>
+                        <Input v-model="initData.logo" :on-change="setInfo" style="max-width:60px;"></Input>
+                        <div slot="content">{{ initData.logo }}</div>
                     </Poptip>
                      <Upload action="//jsonplaceholder.typicode.com/posts/"
                             :max-size="100"
@@ -104,7 +104,7 @@ import { IT120_WEATHER,
         IT120_QQMV_SHOUBO,
         IT120_QQMUSIC_URL,
         IT120_GETNOTICE,
-        IT120_QQMUSIC_LRC
+        IT120_INITINFO
         } from '@/assets/api/index.js'
 import { getExpress,musicUrl} from '@/static/js/index.js'
 
@@ -117,8 +117,10 @@ export default {
     return{
       count:1,
       weather:'',
+      initData:{
+        logo:'http://pgwy52y88.bkt.clouddn.com/logo.png',
+      },
       style:{
-        logoimg:'http://p3.music.126.net/ngMYX6gS8r3r35df8BwwuQ==/109951163570136187.jpg?param=200y200',
         bgcolor:'#fff',
         color:'#b4a078',
       },
@@ -147,6 +149,12 @@ export default {
   },
   methods:{
     init(){
+      IT120_INITINFO().then(res=>{
+        let result=res.data
+        !!result?this.initData=result[0].jsonData:''
+      }).catch(error=>{
+        console.log('获取初始信息失败')
+      })
       //获取天气信息
       IT120_WEATHER().then(res=>{
         let result=res.result.data
@@ -168,6 +176,9 @@ export default {
         console.log(err)
         this.$Message.error({content:'哎呀，出错了',duration: 3});
       })
+    },
+    setInfo(){
+      console.log('kaishi set Info')
     },
     //获取通知
     getNotice(){
@@ -213,8 +224,8 @@ export default {
                           width:80px;height:100%;
                           border:1px solid #ccc;
                           border-radius:40px;">
-                <img class={this.play.isplay?'rotation':'rotation rotationed'} 
-                    src={this.play.img} style="width:100%;height:100%" draggable="false" />
+                  <img class={this.play.isplay?'rotation':'rotation rotationed'} 
+                      src={this.play.img} style="width:80px;height:80px" draggable="false" />
                 </span>
                 <div style="overflow:hidden;display:flex;height:90%;">
                   <span style="margin:auto">
@@ -315,7 +326,7 @@ i{
   flex:1;
 }
 .left{
-  max-width:80px;
+  max-width:65px;
   height:50px;
   overflow: hidden;
   border-radius:2px;
