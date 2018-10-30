@@ -1,5 +1,5 @@
 
-const host ='http://localhost:3000'
+// const host ='http://localhost:3000'
 const Axios=( params={} ) => {
   let _params = Object.assign({
     methods: 'get',
@@ -9,7 +9,7 @@ const Axios=( params={} ) => {
 
   return axios({
     methods: _params.methods,
-    baseURL: host,
+    // baseURL: host,
     url: _params.url,
     data: _params.data,
   }).then(res => {
